@@ -17,7 +17,7 @@
   --txt:#E2E8F0;--txt2:#94A3B8;--txt3:#64748B;
   --shadow:0 4px 24px rgba(0,0,0,.65);--glow:0 0 18px rgba(34,211,238,.2);
   --r:6px;--rL:10px;
-  --mono:'JetBrains Mono','Consolas','Courier New',monospace
+  --mono:'JetBrains Mono','SF Mono','Menlo','Consolas','Courier New',monospace
 }
 [data-theme="light"]{
   --bg0:#E2E8F0;--bg1:#F1F5F9;--bg2:#FFFFFF;--bg3:#EFF6FF;--bg4:#DBEAFE;
@@ -29,7 +29,7 @@
   --shadow:0 4px 24px rgba(0,0,0,.12)
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;font-family:'Noto Sans JP','Segoe UI',sans-serif;background:var(--bg1);color:var(--txt);font-size:14px;line-height:1.5}
+html,body{height:100%;overflow:hidden;font-family:'Noto Sans JP','Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg1);color:var(--txt);font-size:14px;line-height:1.5}
 button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
 input,textarea,select{font-family:inherit;background:var(--bg3);color:var(--txt);border:1px solid var(--border);border-radius:var(--r);padding:5px 9px;outline:none;font-size:13px}
 input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(34,211,238,.15)}
@@ -664,7 +664,7 @@ select{height:30px;padding:0 8px}
     <div class="midPane on" id="mpNpc">
       <div class="pasteHint" id="pasteHint-npc">
         <div class="pasteHintRow">
-          <span>⌨️</span><span>NPC:いあきゃら <kbd>Ctrl+V</kbd></span><br>
+          <span>⌨️</span><span>NPC:いあきゃら <kbd class="pasteKeyHint">Ctrl+V</kbd></span><br>
           <button class="hBtn pri hBtnCopy" onclick="pasteIakNpc()">📋 いあきゃら貼り付け</button>
           <button class="hBtn fs-11" onclick="loadIakNpcFile()">📥 ファイル</button>
           <button class="hBtn hBtnFile" onclick="showLocModal()">📍 場所リスト</button>
@@ -676,14 +676,14 @@ select{height:30px;padding:0 8px}
     <div class="midPane" id="mpEx">
       <div class="pasteHint" id="pasteHint-ex">
         <div class="pasteHintRow">
-          <span>⌨️</span><span>探索者:いあきゃら <kbd>Ctrl+V</kbd></span><br>
+          <span>⌨️</span><span>探索者:いあきゃら <kbd class="pasteKeyHint">Ctrl+V</kbd></span><br>
           <button class="hBtn pri hBtnCopy" onclick="pasteIak()">📋 いあきゃら貼り付け</button>
           <button class="hBtn fs-11" onclick="loadIakFile()">📥 ファイル</button>
           <button class="hBtn hBtnFile" onclick="showLocModal()">📍 場所リスト</button>
         </div>
       </div>
       <div id="charList">
-        <div class="emptyState" id="charEmpty"><div class="ei">🧍</div><div>Ctrl+V で貼り付け</div></div>
+        <div class="emptyState" id="charEmpty"><div class="ei">🧍</div><div><span class="pasteKeyHint">Ctrl+V</span> で貼り付け</div></div>
       </div>
     </div>
   </div>
@@ -777,7 +777,7 @@ select{height:30px;padding:0 8px}
   <div id="exPasteHint">
     <button class="hBtn pri hBtnCopy" onclick="pasteIak()">📋 いあきゃら貼り付け</button>
     <button class="hBtn hBtnFile" onclick="loadIakFile2()">📥 ファイル</button>
-    <span class="exHintNote">または <kbd>Ctrl+V</kbd></span>
+    <span class="exHintNote">または <kbd class="pasteKeyHint">Ctrl+V</kbd></span>
   </div>
   <div id="exCharList">
     <div class="emptyState" id="exCharEmpty"><div class="ei">🧍</div><div>いあきゃらJSONを貼り付けてください</div></div>
@@ -1256,6 +1256,8 @@ select{height:30px;padding:0 8px}
    Complete clean rewrite - all fixes applied
 ============================================================ */
 const SKB='sbr6_b',SKSM='sbr6_sm',SKSET='sbr6_set',SKDICE='sbr6_d';
+const isMac=/Mac|iPhone|iPod|iPad/.test(navigator.platform||navigator.userAgent);
+const PASTE_KEY=isMac?'⌘V':'Ctrl+V';
 let boards={},smemos={};
 let cfg={theme:'dark',rollMode:'CCB',oppMode:'RESB',portraitSize:'none'};
 let curBID=null,autoST=null;
@@ -1273,6 +1275,7 @@ let pendingPortIdx=-1;
 
 /* ── INIT ── */
 window.addEventListener('load',()=>{
+  document.querySelectorAll('.pasteKeyHint').forEach(el=>{el.textContent=PASTE_KEY;});
   loadAll();
   initResize();
   renderBoardList();
@@ -2342,45 +2345,7 @@ function loadIakFile2(){document.getElementById('fi-iak2').click();}
 function handleIaks(e){for(const f of e.target.files)readTxt(f,t=>tryIak(t));e.target.value='';}
 function handleIaks2(e){for(const f of e.target.files)readTxt(f,t=>tryIak(t));e.target.value='';}
 
-/* ── CLIPBOARD PASTE ── */
-async function pasteIak(){
-  try{
-    const t=await navigator.clipboard.readText();
-    if(!t||!t.trim().startsWith('{')){
-      toast('クリップボードにいあきゃらJSONがありません','err');return;
-    }
-    tryIak(t.trim());
-  }catch(err){
-    // Clipboard API failed (permissions) - show instruction
-    toast('クリップボードの読み取りが拒否されました。Ctrl+Vをお試しください','err');
-  }
-}
-
 /* ── CLIPBOARD PASTE FOR IAKYARA ── */
-async function pasteIak(){
-  // Try modern Clipboard API first
-  if(navigator.clipboard&&navigator.clipboard.readText){
-    try{
-      const text=await navigator.clipboard.readText();
-      if(text&&text.trim().startsWith('{')){
-        tryIak(text.trim());
-        return;
-      }else{
-        toast('クリップボードにいあきゃらJSONが見つかりません','err');
-        return;
-      }
-    }catch(e){
-      // Permission denied or not supported - fall through to manual
-    }
-  }
-  // Fallback: prompt user to paste
-  const text=prompt('いあきゃらのJSONを貼り付けてください:');
-  if(text&&text.trim().startsWith('{')){
-    tryIak(text.trim());
-  }else if(text){
-    toast('いあきゃら形式のJSONではありません','err');
-  }
-}
 async function pasteIak(){
   try{
     const text=await navigator.clipboard.readText();
