@@ -518,6 +518,65 @@ select{height:30px;padding:0 8px}
 
 /* ── 現在地セレクト ── */
 .chLocSel{width:100%;height:28px;font-size:12px;margin-bottom:2px}
+
+/* ── インラインstyle撤去分（静的HTML） ── */
+.op-60{opacity:.6}
+.ml-8{margin-left:8px}
+.pt-2{padding-top:2px}
+.shrink-0{flex-shrink:0}
+.nowrap{white-space:nowrap}
+.w-58{width:58px}
+.ff-mono{font-family:var(--mono)}
+.pasteHintRow{align-items:center;gap:8px}
+.hBtnCopy{font-size:12px;padding:5px 12px;white-space:nowrap}
+.hBtnFile{font-size:11px;white-space:nowrap}
+.exHintNote{font-size:10px;color:var(--cyan)}
+.diceModeLbl{font-size:13px;font-weight:700}
+.oppSideLbl{font-size:11px;color:var(--txt3);margin-bottom:3px}
+.oppSelect{width:100%;height:26px;font-size:11px;margin-bottom:3px}
+.oppInput{width:100%;height:28px;font-size:12px}
+.scListPane{width:260px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.scListSearchWrap{padding:6px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
+.scDetailTop{display:flex;align-items:center;gap:8px}
+.panHdrFmt{gap:8px;flex-wrap:wrap;background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 12px}
+.fmtChkRow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1}
+.fmtPunctTitle{font-size:11px;font-weight:700;color:var(--txt2)}
+.fmtPunctChecks{display:flex;gap:8px;flex-wrap:wrap}
+.fmtSplit{display:flex;flex:1;min-height:0}
+.fmtColLeft{display:flex;flex-direction:column;flex:1;min-width:0;padding:10px 8px 10px 12px}
+.fmtColRight{display:flex;flex-direction:column;flex:1;min-width:0;padding:10px 12px 10px 8px}
+.fmtTextarea{flex:1;min-height:0;font-size:13px;line-height:1.75;resize:none}
+.fmtDivider{width:1px;background:var(--border);flex-shrink:0;margin:10px 0}
+.guideHdr{padding:8px 12px 4px;font-size:15px;font-weight:800;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:10}
+.gDuration{color:var(--txt3);margin-bottom:8px}
+.settingsHdr{padding:8px 12px;font-size:15px;font-weight:800;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0}
+.versionInfo{font-family:'Mv Boli',sans-serif;color:var(--cyan)}
+.shGroupTitle{font-size:12px;font-weight:700;color:var(--txt2);margin:10px 0 6px}
+.shExList{display:flex;flex-direction:column;gap:6px;font-size:12px}
+.hintNote{font-size:11px;color:var(--txt3);margin-bottom:4px}
+.hintNoteShrink{font-size:11px;color:var(--txt3);margin-bottom:4px;flex-shrink:0}
+.hintNoteShrink2{font-size:11px;color:var(--txt3);margin:8px 0 4px;flex-shrink:0}
+.rtModalHdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0}
+.rtEditNameWrap{margin-bottom:8px;flex-shrink:0}
+.rtAddRowWrap{display:flex;gap:6px;flex-shrink:0;margin-top:4px}
+.rtModalActs{display:flex;gap:8px;margin-top:12px;flex-shrink:0}
+#scSearch{width:100%;font-size:12px}
+#scList{flex:1;overflow-y:auto;padding:6px;display:flex;flex-direction:column;gap:5px}
+#scDetail{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+#scDetailContent{display:none;flex-direction:column;gap:10px}
+#scDetailName{font-size:16px;font-weight:800;flex:1}
+#scMemo{width:100%;min-height:120px;font-size:13px;background:var(--bg1)}
+#scBoards{display:flex;flex-direction:column;gap:5px}
+#logCount{font-size:11px;color:var(--txt3)}
+#logRoomTabs{display:none;gap:3px;padding:4px 8px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+#fmtPunctGroup{display:flex;flex-direction:column;gap:5px;padding:7px 9px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);width:100%}
+#fmtPunctExtra{width:90px;height:24px;font-size:12px;font-family:var(--mono)}
+#nb-sc-sel{flex:1;height:30px;font-size:12px}
+#nb-sc{flex:1;font-size:12px}
+#loc-list{min-height:150px}
+#rtModalTitle{font-weight:700;font-size:15px}
+#rtEditName{width:100%;height:32px;font-size:14px}
+#rtDiceLabel{color:var(--cyan);font-family:var(--mono);margin-left:6px}
 </style>
 </head>
 <body>
@@ -584,13 +643,13 @@ select{height:30px;padding:0 8px}
       <button class="cBtn" onclick="jumpPage(1)">次 ▶</button>
       <input type="number" id="pageJump" placeholder="P#" min="1" title="ページ番号" aria-label="ページ番号">
       <button class="cBtn" onclick="goPage()">移動</button>
-      <input type="number" id="zoomNum" placeholder="100" min="30" max="300" value="100" style="width:60px;height:26px;font-size:12px;text-align:center">
+      <input type="number" id="zoomNum" placeholder="100" min="30" max="300" value="100">
       <span class="zoom-pct">%</span>
       <button class="cBtn" onclick="applyZoom()">適用</button>
     </div>
     <div id="pdfVP">
       <div class="dnd-hint">📄 PDFをここにドロップ</div>
-      <div id="pdfEmpty"><div class="ei">📄</div><div>＋ ボタンからPDFを追加<br><span style="font-size:11px;opacity:.6">またはここにドラッグ&ドロップ</span></div></div>
+      <div id="pdfEmpty"><div class="ei">📄</div><div>＋ ボタンからPDFを追加<br><span class="fs-11 op-60">またはここにドラッグ&ドロップ</span></div></div>
       <div id="pdfPages" class="d-none"></div>
     </div>
   </div>
@@ -604,11 +663,11 @@ select{height:30px;padding:0 8px}
     </div>
     <div class="midPane on" id="mpNpc">
       <div class="pasteHint" id="pasteHint-npc">
-        <div style="align-items:center;gap:8px">
+        <div class="pasteHintRow">
           <span>⌨️</span><span>NPC:いあきゃら <kbd>Ctrl+V</kbd></span><br>
-          <button class="hBtn pri" style="font-size:12px;padding:5px 12px;white-space:nowrap" onclick="pasteIakNpc()">📋 いあきゃら貼り付け</button>
-          <button class="hBtn" style="font-size:11px" onclick="loadIakNpcFile()">📥 ファイル</button>
-          <button class="hBtn" onclick="showLocModal()" style="font-size:11px;white-space:nowrap">📍 場所リスト</button>
+          <button class="hBtn pri hBtnCopy" onclick="pasteIakNpc()">📋 いあきゃら貼り付け</button>
+          <button class="hBtn fs-11" onclick="loadIakNpcFile()">📥 ファイル</button>
+          <button class="hBtn hBtnFile" onclick="showLocModal()">📍 場所リスト</button>
         </div>
       </div>
       <div id="npcList"></div>
@@ -616,11 +675,11 @@ select{height:30px;padding:0 8px}
     </div>
     <div class="midPane" id="mpEx">
       <div class="pasteHint" id="pasteHint-ex">
-        <div style="align-items:center;gap:8px">
+        <div class="pasteHintRow">
           <span>⌨️</span><span>探索者:いあきゃら <kbd>Ctrl+V</kbd></span><br>
-          <button class="hBtn pri" onclick="pasteIak()" style="font-size:12px;padding:5px 12px;white-space:nowrap">📋 いあきゃら貼り付け</button>
-          <button class="hBtn" onclick="loadIakFile()" style="font-size:11px">📥 ファイル</button>
-          <button class="hBtn" onclick="showLocModal()" style="font-size:11px;white-space:nowrap">📍 場所リスト</button>
+          <button class="hBtn pri hBtnCopy" onclick="pasteIak()">📋 いあきゃら貼り付け</button>
+          <button class="hBtn fs-11" onclick="loadIakFile()">📥 ファイル</button>
+          <button class="hBtn hBtnFile" onclick="showLocModal()">📍 場所リスト</button>
         </div>
       </div>
       <div id="charList">
@@ -680,29 +739,29 @@ select{height:30px;padding:0 8px}
   </div>
   <div class="scFlex">
     <!-- Scenario list -->
-    <div style="width:260px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden">
-      <div style="padding:6px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0">
-        <input type="text" id="scSearch" placeholder="🔍 検索..." oninput="renderScenarioList()" style="width:100%;font-size:12px">
+    <div class="scListPane">
+      <div class="scListSearchWrap">
+        <input type="text" id="scSearch" placeholder="🔍 検索..." oninput="renderScenarioList()">
       </div>
-      <div id="scList" style="flex:1;overflow-y:auto;padding:6px;display:flex;flex-direction:column;gap:5px">
+      <div id="scList">
         <div class="emptyState" id="scEmpty"><div class="ei">📖</div><div>シナリオがありません</div></div>
       </div>
     </div>
     <!-- Scenario detail -->
-    <div id="scDetail" style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px">
+    <div id="scDetail">
       <div class="emptyState" id="scDetailEmpty"><div class="ei">📖</div><div>シナリオを選択してください</div></div>
-      <div id="scDetailContent" style="display:none;flex-direction:column;gap:10px">
-        <div style="display:flex;align-items:center;gap:8px">
-          <div id="scDetailName" style="font-size:16px;font-weight:800;flex:1"></div>
+      <div id="scDetailContent">
+        <div class="scDetailTop">
+          <div id="scDetailName"></div>
           <button class="hBtn" onclick="delScenario()">🗑 削除</button>
         </div>
         <div class="sSec">
           <div class="sSecT">📋 シナリオメモ（共有）</div>
-          <textarea id="scMemo" style="width:100%;min-height:120px;font-size:13px;background:var(--bg1)" oninput="schedScSave()" placeholder="演出・BGM・回し方のコツ・共有メモ"></textarea>
+          <textarea id="scMemo" oninput="schedScSave()" placeholder="演出・BGM・回し方のコツ・共有メモ"></textarea>
         </div>
         <div class="sSec">
           <div class="sSecT">📂 関連Board一覧</div>
-          <div id="scBoards" style="display:flex;flex-direction:column;gap:5px"></div>
+          <div id="scBoards"></div>
         </div>
       </div>
     </div>
@@ -716,9 +775,9 @@ select{height:30px;padding:0 8px}
     <button class="hBtn" onclick="loadIakFile2()">📥 ファイル読込</button>
   </div>
   <div id="exPasteHint">
-    <button class="hBtn pri" onclick="pasteIak()" style="font-size:12px;padding:5px 12px;white-space:nowrap">📋 いあきゃら貼り付け</button>
-    <button class="hBtn" onclick="loadIakFile2()" style="font-size:11px;white-space:nowrap">📥 ファイル</button>
-    <span style="font-size:10px;color:var(--cyan)">または <kbd>Ctrl+V</kbd></span>
+    <button class="hBtn pri hBtnCopy" onclick="pasteIak()">📋 いあきゃら貼り付け</button>
+    <button class="hBtn hBtnFile" onclick="loadIakFile2()">📥 ファイル</button>
+    <span class="exHintNote">または <kbd>Ctrl+V</kbd></span>
   </div>
   <div id="exCharList">
     <div class="emptyState" id="exCharEmpty"><div class="ei">🧍</div><div>いあきゃらJSONを貼り付けてください</div></div>
@@ -727,12 +786,12 @@ select{height:30px;padding:0 8px}
 
 <div class="panel" id="pDice">
   <div class="diceTb">
-    <span style="font-size:13px;font-weight:700">コマンドモード</span>
+    <span class="diceModeLbl">コマンドモード</span>
     <div class="modeRow">
       <button class="mBtn on" id="m-ccb" onclick="setRM('CCB')">CCB</button>
       <button class="mBtn" id="m-cc" onclick="setRM('CC')">CC</button>
     </div>
-    <div class="modeRow" style="margin-left:8px">
+    <div class="modeRow ml-8">
       <button class="mBtn on" id="m-resb" onclick="setOM('RESB')">RESB</button>
       <button class="mBtn" id="m-res" onclick="setOM('RES')">RES</button>
     </div>
@@ -764,9 +823,9 @@ select{height:30px;padding:0 8px}
 
     <!-- カスタム入力（カスタム選択時のみ表示） -->
     <div class="roundCustom" id="roundCustomRow">
-      <input type="text" id="roundPre" placeholder="前" value="◆" oninput="updateRoundPreview()" style="font-family:var(--mono)">
+      <input type="text" id="roundPre" placeholder="前" value="◆" oninput="updateRoundPreview()" class="ff-mono">
       <span class="roundCustomFmt">{R}R</span>
-      <input type="text" id="roundSuf" placeholder="後" value="◆" oninput="updateRoundPreview()" style="font-family:var(--mono)">
+      <input type="text" id="roundSuf" placeholder="後" value="◆" oninput="updateRoundPreview()" class="ff-mono">
     </div>
 
     <!-- プレビュー -->
@@ -780,16 +839,16 @@ select{height:30px;padding:0 8px}
       <div class="dSecT">⚔️ 対抗ロール <small class="dSecNote">50+(能動−受動)×5</small></div>
       <div class="oppGrid">
         <div>
-          <div style="font-size:11px;color:var(--txt3);margin-bottom:3px">⬆ 能動側</div>
-          <select id="oppAChar" style="width:100%;height:26px;font-size:11px;margin-bottom:3px" onchange="oppCharChange('A')"><option value="">-- キャラ選択 --</option></select>
-          <select id="oppASkill" style="width:100%;height:26px;font-size:11px;margin-bottom:3px" onchange="oppSkillChange('A')"><option value="">-- 技能選択 --</option></select>
-          <input type="number" id="oppA" style="width:100%;height:28px;font-size:12px" placeholder="値を直接入力">
+          <div class="oppSideLbl">⬆ 能動側</div>
+          <select id="oppAChar" class="oppSelect" onchange="oppCharChange('A')"><option value="">-- キャラ選択 --</option></select>
+          <select id="oppASkill" class="oppSelect" onchange="oppSkillChange('A')"><option value="">-- 技能選択 --</option></select>
+          <input type="number" id="oppA" class="oppInput" placeholder="値を直接入力">
         </div>
         <div>
-          <div style="font-size:11px;color:var(--txt3);margin-bottom:3px">⬇ 受動側</div>
-          <select id="oppPChar" style="width:100%;height:26px;font-size:11px;margin-bottom:3px" onchange="oppCharChange('P')"><option value="">-- キャラ選択 --</option></select>
-          <select id="oppPSkill" style="width:100%;height:26px;font-size:11px;margin-bottom:3px" onchange="oppSkillChange('P')"><option value="">-- 技能選択 --</option></select>
-          <input type="number" id="oppP" style="width:100%;height:28px;font-size:12px" placeholder="値を直接入力">
+          <div class="oppSideLbl">⬇ 受動側</div>
+          <select id="oppPChar" class="oppSelect" onchange="oppCharChange('P')"><option value="">-- キャラ選択 --</option></select>
+          <select id="oppPSkill" class="oppSelect" onchange="oppSkillChange('P')"><option value="">-- 技能選択 --</option></select>
+          <input type="number" id="oppP" class="oppInput" placeholder="値を直接入力">
         </div>
       </div>
       <div class="oppHint">💡 キャラ未選択・値直接入力でカスタム対抗にも対応</div>
@@ -804,7 +863,7 @@ select{height:30px;padding:0 8px}
     <div class="dSecT">🎲 オリジナル表</div>
     <div class="rtSearchRow">
       <input id="rtSearch" type="text" placeholder="🔍 表名検索..." oninput="renderRtList()">
-      <button class="hBtn pri" onclick="rtNewModal()" style="white-space:nowrap">＋ 新規作成</button>
+      <button class="hBtn pri nowrap" onclick="rtNewModal()">＋ 新規作成</button>
       <button class="hBtn" onclick="rtImport()" title="JSONインポート">📥</button>
       <button class="hBtn" onclick="rtExport()" title="JSONエクスポート">📤</button>
     </div>
@@ -823,9 +882,9 @@ select{height:30px;padding:0 8px}
     <button class="hBtn pri" onclick="loadLogFile()">📥 HTMLログ読込</button>
     <input type="text" id="logSearch" placeholder="🔍 検索..." oninput="filterLog()">
     <button class="hBtn" onclick="clearLog()">🗑 消去</button>
-    <span id="logCount" style="font-size:11px;color:var(--txt3)"></span>
+    <span id="logCount"></span>
   </div>
-  <div id="logRoomTabs" style="display:none;gap:3px;padding:4px 8px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap"></div>
+  <div id="logRoomTabs"></div>
   <div class="logBody" id="logBody"><div class="emptyState">コココフォリアのHTMLログを読み込んでください</div></div>
 </div>
 
@@ -834,16 +893,16 @@ select{height:30px;padding:0 8px}
 <div class="panel" id="pFormat">
 
   <!-- ツールバー -->
-  <div class="panHdr" style="gap:8px;flex-wrap:wrap;background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 12px">
+  <div class="panHdr panHdrFmt">
     <span class="panTitle">📃 テキスト整形</span>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex:1">
+    <div class="fmtChkRow">
       <label class="fmtChk"><input type="checkbox" id="fmtKeepBlank" checked onchange="runFormat()">空行を段落保持</label>
       <label class="fmtChk"><input type="checkbox" id="fmtKeepList"  checked onchange="runFormat()">リスト行保持</label>
       <label class="fmtChk"><input type="checkbox" id="fmtTrimSpace" checked onchange="runFormat()">前後空白除去</label>
       <label class="fmtChk"><input type="checkbox" id="fmtJoinAll" onchange="runFormat()" title="すべての改行を無視して結合">強制結合</label>
-      <div id="fmtPunctGroup" style="display:flex;flex-direction:column;gap:5px;padding:7px 9px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);width:100%">
-        <div style="font-size:11px;font-weight:700;color:var(--txt2)">📌 文末として扱う文字</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div id="fmtPunctGroup">
+        <div class="fmtPunctTitle">📌 文末として扱う文字</div>
+        <div class="fmtPunctChecks">
           <label class="fmtChk"><input type="checkbox" id="fp-kuten"  checked onchange="runFormat()">。（句点）</label>
           <label class="fmtChk"><input type="checkbox" id="fp-ten"          onchange="runFormat()">、（読点）</label>
           <label class="fmtChk"><input type="checkbox" id="fp-excl"   checked onchange="runFormat()">！</label>
@@ -853,15 +912,14 @@ select{height:30px;padding:0 8px}
           <label class="fmtChk"><input type="checkbox" id="fp-ellip"  checked onchange="runFormat()">…‥（省略）</label>
           <label class="fmtChk"><input type="checkbox" id="fp-kagi"   checked onchange="runFormat()">」』)）（閉じ）</label>
         </div>
-        <div style="display:flex;align-items:center;gap:5px">
-          <span style="font-size:11px;color:var(--txt3)">追加文末文字:</span>
+        <div class="d-flex gap-5 ai-center">
+          <span class="fs-11 txt-muted">追加文末文字:</span>
           <input type="text" id="fmtPunctExtra" placeholder="例: ―～" value=""
-            style="width:90px;height:24px;font-size:12px;font-family:var(--mono)"
             oninput="runFormat()">
         </div>
       </div>
     </div>
-    <div style="display:flex;gap:5px;flex-shrink:0">
+    <div class="d-flex gap-5 shrink-0">
       <button class="hBtn pri" onclick="formatCopy()" title="整形結果をコピー">📋 コピー</button>
       <button class="hBtn" onclick="formatSwap()" title="整形結果を入力欄に移して再整形">⇄ 差し替え</button>
       <button class="hBtn" onclick="formatClear()" title="クリア">🗑 クリア</button>
@@ -869,27 +927,27 @@ select{height:30px;padding:0 8px}
   </div>
 
   <!-- 左右分割 -->
-  <div style="display:flex;flex:1;min-height:0">
+  <div class="fmtSplit">
 
     <!-- 左：入力 -->
-    <div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:10px 8px 10px 12px">
-      <div class="fmtLabel" style="padding-top:2px">📋 貼り付けエリア（整形前）</div>
+    <div class="fmtColLeft">
+      <div class="fmtLabel pt-2">📋 貼り付けエリア（整形前）</div>
       <textarea id="fmtInput"
         placeholder="PDFからコピーしたテキストをここに貼り付け..."
-        style="flex:1;min-height:0;font-size:13px;line-height:1.75;resize:none"
+        class="fmtTextarea"
         oninput="runFormat()" spellcheck="false"></textarea>
       <div id="fmtInStats" class="fmtStats"></div>
     </div>
 
     <!-- 縦区切り -->
-    <div style="width:1px;background:var(--border);flex-shrink:0;margin:10px 0"></div>
+    <div class="fmtDivider"></div>
 
     <!-- 右：出力 -->
-    <div style="display:flex;flex-direction:column;flex:1;min-width:0;padding:10px 12px 10px 8px">
+    <div class="fmtColRight">
       <div class="fmtLabel">✨ 整形結果（編集可能）</div>
       <textarea id="fmtOutput"
         placeholder="整形結果がここに表示されます..."
-        style="flex:1;min-height:0;font-size:13px;line-height:1.75;resize:none"
+        class="fmtTextarea"
         spellcheck="false"></textarea>
       <div id="fmtStats" class="fmtStats"></div>
     </div>
@@ -898,10 +956,10 @@ select{height:30px;padding:0 8px}
 </div>
 
 <div class="panel" id="pGuide">
-  <div style="padding:8px 12px 4px;font-size:15px;font-weight:800;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:10">ℹ️ ガイド</div>
+  <div class="guideHdr">ℹ️ ガイド</div>
 
   <div class="gSec"><div class="gTitle" onclick="togG(this)"><span>🧠 短期の一時的狂気表</span><span>▾</span></div>
-  <div class="gBody"><div style="color:var(--txt3);margin-bottom:8px">継続時間：1D10+4 ラウンド</div>
+  <div class="gBody"><div class="gDuration">継続時間：1D10+4 ラウンド</div>
   <table class="gTbl"><tr><th>出目</th><th>症状</th></tr>
   <tr><td>1</td><td>気絶あるいは金切り声の発作</td></tr>
   <tr><td>2</td><td>パニック状態で逃げ出す</td></tr>
@@ -916,7 +974,7 @@ select{height:30px;padding:0 8px}
   </table></div></div>
 
   <div class="gSec"><div class="gTitle" onclick="togG(this)"><span>💀 長期の一時的狂気表</span><span>▾</span></div>
-  <div class="gBody"><div style="color:var(--txt3);margin-bottom:8px">継続時間：1D10×10 時間</div>
+  <div class="gBody"><div class="gDuration">継続時間：1D10×10 時間</div>
   <table class="gTbl"><tr><th>出目</th><th>症状</th></tr>
   <tr><td>1</td><td>健忘症（親しい者のことを最初に忘れる：言語や肉体的な技能は働くが知的な技能は働かない）あるいは昏迷／緊張症</td></tr>
   <tr><td>2</td><td>激しい恐怖症（逃げ出すことはできるが、恐怖の対象はどこへ行っても見える）</td></tr>
@@ -958,7 +1016,7 @@ select{height:30px;padding:0 8px}
 
   <div class="gSec"><div class="gTitle" onclick="togG(this)"><span>🔫 武器・銃火器一覧</span><span>▾</span></div>
   <div class="gBody">
-  <table class="gTbl click" style="font-size:12px">
+  <table class="gTbl click fs-12">
   <tr><th>種類</th><th>武器</th><th>ダメージ値</th><th>攻撃/R</th><th>装弾数</th><th>故障ナンバー</th></tr>
   <tr data-copy="1d3+1+db" onclick="cCmd(this.dataset.copy)"><td>近接</td><td>メリケンサック</td><td>1d3+1+db</td><td></td><td></td><td></td></tr>
   <tr data-copy="1d8+2+db" onclick="cCmd(this.dataset.copy)"><td>近接</td><td>木斧</td><td>1d8+2+db</td><td></td><td></td><td></td></tr>
@@ -997,7 +1055,7 @@ select{height:30px;padding:0 8px}
 </div>
 
 <div class="panel" id="pSettings">
-  <div style="padding:8px 12px;font-size:15px;font-weight:800;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0">⚙️ 設定</div>
+  <div class="settingsHdr">⚙️ 設定</div>
   <div class="sSec">
     <div class="sSecT">🎨 テーマ</div>
     <div class="sRow">
@@ -1032,8 +1090,8 @@ select{height:30px;padding:0 8px}
   </div>
   <div class="sSec">
     <div class="sSecT">💻 バージョン情報</div>
-    <div class="sRow"><label>現在のバージョン</label><span style="font-family: 'Mv Boli',sans-serif; color:var(--cyan);">1.6.0</span></div>
-    <div class="sRow"><label>最終更新日</label><span style="font-family: 'Mv Boli',sans-serif; color:var(--cyan);">2026/07/20</span></div>
+    <div class="sRow"><label>現在のバージョン</label><span class="versionInfo">1.6.0</span></div>
+    <div class="sRow"><label>最終更新日</label><span class="versionInfo">2026/07/20</span></div>
   </div>
 </div>
 
@@ -1043,7 +1101,7 @@ select{height:30px;padding:0 8px}
 <div class="modal modal-search-help">
   <div class="mTitle">🔍 検索仕様</div>
 
-  <div style="font-size:12px;font-weight:700;color:var(--txt2);margin:10px 0 6px">オペレータ</div>
+  <div class="shGroupTitle">オペレータ</div>
   <table class="sh-tbl">
     <tr class="sh-tr-hdr"><th class="sh-th">記号</th><th class="sh-th">説明</th></tr>
     <tr><td class="sh-td-mono">スペース</td><td class="sh-td">AND（両方にマッチ）</td></tr>
@@ -1052,14 +1110,14 @@ select{height:30px;padding:0 8px}
     <tr><td class="sh-td-mono-last">""</td><td class="sh-td-last">フレーズ検索（スペースを含む語句）</td></tr>
   </table>
 
-  <div style="font-size:12px;font-weight:700;color:var(--txt2);margin:10px 0 6px">ワイルドカード</div>
+  <div class="shGroupTitle">ワイルドカード</div>
   <table class="sh-tbl">
     <tr class="sh-tr-hdr"><th class="sh-th">記号</th><th class="sh-th">説明</th></tr>
     <tr><td class="sh-td-mono">*</td><td class="sh-td">0文字以上の任意の文字</td></tr>
     <tr><td class="sh-td-mono-last">?</td><td class="sh-td-last">任意の1文字</td></tr>
   </table>
 
-  <div style="font-size:12px;font-weight:700;color:var(--txt2);margin:10px 0 6px">フィールド指定</div>
+  <div class="shGroupTitle">フィールド指定</div>
   <table class="sh-tbl">
     <tr class="sh-tr-hdr"><th class="sh-th">記号</th><th class="sh-th">説明</th></tr>
     <tr><td class="sh-td-mono">board:</td><td class="sh-td">Board名にマッチ</td></tr>
@@ -1068,7 +1126,7 @@ select{height:30px;padding:0 8px}
     <tr><td class="sh-td-mono-last">player:</td><td class="sh-td-last">PL名にマッチ</td></tr>
   </table>
 
-  <div style="font-size:12px;font-weight:700;color:var(--txt2);margin:10px 0 6px">日付の指定</div>
+  <div class="shGroupTitle">日付の指定</div>
   <table class="sh-tbl">
     <tr class="sh-tr-hdr"><th class="sh-th">構文</th><th class="sh-th">説明</th></tr>
     <tr><td class="sh-td-mono">session:year:N</td><td class="sh-td">年にマッチ</td></tr>
@@ -1077,8 +1135,8 @@ select{height:30px;padding:0 8px}
     <tr><td class="sh-td-mono-last">session:開始...終了</td><td class="sh-td-last">期間を指定</td></tr>
   </table>
 
-  <div style="font-size:12px;font-weight:700;color:var(--txt2);margin:10px 0 6px">検索例</div>
-  <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+  <div class="shGroupTitle">検索例</div>
+  <div class="shExList">
     <div class="sh-ex">
       <div class="sh-ex-label">Board名「テストプレイ」にマッチ</div>
       <code class="sh-ex-code">board:テストプレイ</code>
@@ -1109,9 +1167,9 @@ select{height:30px;padding:0 8px}
   <div class="mTitle">📖 新規Board作成</div>
   <div class="mRow"><label>Board名 *</label><input id="nb-name" placeholder="第1卓・本番など"></div>
   <div class="mRow"><label>シナリオ名</label>
-    <div style="display:flex;gap:5px;align-items:center">
-      <select id="nb-sc-sel" aria-label="シナリオを選択" title="シナリオを選択" style="flex:1;height:30px;font-size:12px" onchange="onScenarioSel()"><option value="">-- シナリオを選択 --</option></select>
-      <input id="nb-sc" placeholder="または新規入力" style="flex:1;font-size:12px">
+    <div class="d-flex gap-5 ai-center">
+      <select id="nb-sc-sel" aria-label="シナリオを選択" title="シナリオを選択" onchange="onScenarioSel()"><option value="">-- シナリオを選択 --</option></select>
+      <input id="nb-sc" placeholder="または新規入力">
     </div>
   </div>
   <div class="mg2">
@@ -1130,9 +1188,9 @@ select{height:30px;padding:0 8px}
     <div class="mTitle">👤 NPC追加</div>
     <div class="mRow"><label>名前 *</label><input id="npc-name" placeholder="NPC名"></div>
     <div class="mg2">
-      <div class="mRow"><label>HP / 最大HP</label><div class="npcStatRow"><input id="npc-hp" type="number" placeholder="62" style="width:58px"> / <input id="npc-hpm" type="number" placeholder="80" style="width:58px"></div></div>
-      <div class="mRow"><label>MP / 最大MP</label><div class="npcStatRow"><input id="npc-mp" type="number" placeholder="10" style="width:58px"> / <input id="npc-mpm" type="number" placeholder="10" style="width:58px"></div></div>
-      <div class="mRow"><label>SAN / 最大SAN</label><div class="npcStatRow"><input id="npc-san" type="number" placeholder="50" style="width:58px"> / <input id="npc-sanm" type="number" placeholder="80" style="width:58px"></div></div>
+      <div class="mRow"><label>HP / 最大HP</label><div class="npcStatRow"><input id="npc-hp" type="number" placeholder="62" class="w-58"> / <input id="npc-hpm" type="number" placeholder="80" class="w-58"></div></div>
+      <div class="mRow"><label>MP / 最大MP</label><div class="npcStatRow"><input id="npc-mp" type="number" placeholder="10" class="w-58"> / <input id="npc-mpm" type="number" placeholder="10" class="w-58"></div></div>
+      <div class="mRow"><label>SAN / 最大SAN</label><div class="npcStatRow"><input id="npc-san" type="number" placeholder="50" class="w-58"> / <input id="npc-sanm" type="number" placeholder="80" class="w-58"></div></div>
     </div>
     <div class="mRow"><label>メモ</label><textarea id="npc-memo" placeholder="メモ"></textarea></div>
     <div class="mActs">
@@ -1145,9 +1203,9 @@ select{height:30px;padding:0 8px}
   <div class="modal">
     <div class="mTitle">📍 場所リスト編集</div>
     <div class="mRow"><label>場所リスト（改行区切り・上から順に選択肢へ表示されます）</label>
-      <textarea id="loc-list" style="min-height:150px" placeholder="例:&#10;玄関ホール&#10;書斎&#10;地下室"></textarea>
+      <textarea id="loc-list" placeholder="例:&#10;玄関ホール&#10;書斎&#10;地下室"></textarea>
     </div>
-    <div style="font-size:11px;color:var(--txt3);margin-bottom:4px">💡 保存すると各PLカードの「現在地」プルダウンへ即時反映されます。行の追加・削除・並べ替えはいつでも可能です。</div>
+    <div class="hintNote">💡 保存すると各PLカードの「現在地」プルダウンへ即時反映されます。行の追加・削除・並べ替えはいつでも可能です。</div>
     <div class="mActs">
       <button class="hBtn" onclick="closeM('mLocList')">キャンセル</button>
       <button class="hBtn pri" onclick="saveLocList()">保存</button>
@@ -1166,26 +1224,26 @@ select{height:30px;padding:0 8px}
 
 <!-- ======== ROLL TABLE MODAL ======== -->
 <div class="overlay" id="rtModal" onclick="if(event.target===this)rtCloseModal()">
-  <div class="modal" style="width:520px;max-height:88vh;display:flex;flex-direction:column">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0">
-      <span style="font-weight:700;font-size:15px" id="rtModalTitle">オリジナル表を作成</span>
+  <div class="modal">
+    <div class="rtModalHdr">
+      <span id="rtModalTitle">オリジナル表を作成</span>
       <button class="iBtn" onclick="rtCloseModal()">✕</button>
     </div>
-    <div style="margin-bottom:8px;flex-shrink:0">
-      <div style="font-size:11px;color:var(--txt3);margin-bottom:4px">表の名前</div>
-      <input id="rtEditName" type="text" placeholder="例：天気表" style="width:100%;height:32px;font-size:14px">
+    <div class="rtEditNameWrap">
+      <div class="hintNote">表の名前</div>
+      <input id="rtEditName" type="text" placeholder="例：天気表">
     </div>
-    <div style="font-size:11px;color:var(--txt3);margin-bottom:4px;flex-shrink:0">
-      結果行 <span id="rtDiceLabel" style="color:var(--cyan);font-family:var(--mono);margin-left:6px"></span>
+    <div class="hintNoteShrink">
+      結果行 <span id="rtDiceLabel"></span>
     </div>
     <div class="rtRowList" id="rtEditRows"></div>
-    <div style="display:flex;gap:6px;flex-shrink:0;margin-top:4px">
-      <button class="hBtn" onclick="rtAddRow()" style="flex:1">＋ 行追加</button>
+    <div class="rtAddRowWrap">
+      <button class="hBtn flex-1" onclick="rtAddRow()">＋ 行追加</button>
     </div>
-    <div style="font-size:11px;color:var(--txt3);margin:8px 0 4px;flex-shrink:0">プレビュー</div>
+    <div class="hintNoteShrink2">プレビュー</div>
     <div class="rtPreview" id="rtPreview"></div>
-    <div style="display:flex;gap:8px;margin-top:12px;flex-shrink:0">
-      <button class="hBtn pri" onclick="rtSaveModal()" style="flex:1">保存</button>
+    <div class="rtModalActs">
+      <button class="hBtn pri flex-1" onclick="rtSaveModal()">保存</button>
       <button class="hBtn" onclick="rtCloseModal()">キャンセル</button>
     </div>
   </div>
