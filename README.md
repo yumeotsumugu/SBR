@@ -1,8 +1,6 @@
-<p align="center">
-  <img src="assets/SBR_banner.png" alt="SBR - Session Board and Record -" width="100%">
-</p>
-
 # 📖 SBR - Session Board and Record -
+
+![SBR - Session Board and Record -](assets/SBR_banner.png)
 
 TRPG（主にクトゥルフ神話TRPG）セッションの準備・進行・記録をひとつの画面でまとめて行うための、ブラウザ単体で動作するセッション管理ツールです。
 
