@@ -328,8 +328,8 @@
   <h1>SBR 使い方マニュアル</h1>
   <p class="sub">TRPGセッションの準備から本番、記録までをひとつの画面で。<br>はじめての方でも迷わないよう、この手引書に沿って開いてみてください。</p>
   <div class="meta">
-    <span>対応バージョン：v1.6.0（2026/07/20）</span>
-    <span>動作環境：Google Chrome / Windows 11</span>
+    <span>対応バージョン：v1.7.0（2026/08/17）</span>
+    <span>動作環境：Google Chrome / Microsoft Edge / Firefox・Windows / macOS</span>
     <span>インストール不要</span>
   </div>
 </div>
@@ -640,7 +640,7 @@
     </div>
     <div class="card">
       <h3>Q. 動作確認済みの環境は？</h3>
-      <p>Google Chrome ＋ Windows 11 Home で動作確認されています。他の環境（他ブラウザ・他OS）では動作保証はされていないのでご注意ください。</p>
+      <p>Windows／macOS上のGoogle Chrome・Microsoft Edge・Firefoxで動作確認されています（Safariでの動作確認は行っていません）。上記以外の環境では動作保証はされていないのでご注意ください。</p>
     </div>
     <div class="card">
       <h3>Q. Boardメモとシナリオメモ、何が違うの？</h3>
@@ -680,7 +680,8 @@
 
     <div class="card">
       <h3>💻 動作環境</h3>
-      <p style="margin:0;">対応OSはWindowsです。それ以外の環境（他OS・他ブラウザなど）では動作確認を行っていないため、動作保証外となります。</p>
+      <p style="margin:0 0 .5rem;">対応OSはWindows／macOSです。対応ブラウザはGoogle Chrome・Microsoft Edge・Firefoxで動作確認済みです（Safariでの動作確認は行っていません）。</p>
+      <p style="margin:0;">上記以外の環境（他OS・他ブラウザなど）では動作確認を行っていないため、動作保証外となります。</p>
     </div>
 
     <div class="card">
@@ -726,6 +727,17 @@
       <div><span class="eyebrow">Appendix D</span><h2>更新履歴</h2></div>
     </div>
     <p class="lead">これまでのバージョンアップの記録です。新しい順に並んでいます。</p>
+
+    <div class="card">
+      <h3>v1.7.0 <small style="color:var(--parchment-dim); font-weight:400;">2026/08/17</small></h3>
+      <ul>
+        <li>macOSに対応。貼り付けヒントの表示がお使いの環境に応じて「Ctrl+V」／「⌘V」に自動で切り替わるように</li>
+        <li>Mac環境向けにフォント表示を最適化（システムフォント・等幅フォントのフォールバックを追加）</li>
+        <li>Google Chromeに加え、Microsoft Edge・Firefoxでの動作確認を実施</li>
+        <li>コード整理：使われていなかった貼り付け処理の重複定義を削除</li>
+        <li>保守性向上：画面装飾のスタイル指定を外部CSSに統一し、表示の一貫性を強化</li>
+      </ul>
+    </div>
 
     <div class="card">
       <h3>v1.6.0 <small style="color:var(--parchment-dim); font-weight:400;">2026/07/20</small></h3>
