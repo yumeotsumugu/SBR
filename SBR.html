@@ -586,6 +586,7 @@ select{height:30px;padding:0 8px}
 <div id="hdr">
   <div class="logo">📖 SBR - Session Board and Record - </div>
   <span id="boardLabel" class="txt-muted">Board未選択</span>
+  <button class="hBtn" onclick="curBID?showEditScenarioModal(curBID):toast('先にBoardを選択してください','err')" title="連携シナリオ変更">📖 シナリオ変更</button>
   <button class="hBtn pri" onclick="showNewBoardModal()">＋ 新規</button>
   <button class="hBtn" onclick="showPanel('boards')">📂 一覧</button>
   <div class="sp"></div>
@@ -1091,7 +1092,7 @@ select{height:30px;padding:0 8px}
   </div>
   <div class="sSec">
     <div class="sSecT">💻 バージョン情報</div>
-    <div class="sRow"><label>現在のバージョン</label><span class="versionInfo">1.7.0</span></div>
+    <div class="sRow"><label>現在のバージョン</label><span class="versionInfo">1.8.0</span></div>
     <div class="sRow"><label>最終更新日</label><span class="versionInfo">2026/08/17</span></div>
   </div>
 </div>
@@ -1200,6 +1201,26 @@ select{height:30px;padding:0 8px}
     </div>
   </div>
 </div>
+<div class="mOv" id="mEditScenario">
+<div class="modal">
+  <div class="mTitle">📖 連携シナリオの変更</div>
+  <div class="mRow"><label>対象Board</label>
+    <div id="es-board-name" class="fs-12"></div>
+  </div>
+  <div class="mRow"><label>シナリオ名</label>
+    <div class="d-flex gap-5 ai-center">
+      <select id="es-sc-sel" class="flex-1 h-26 fs-12" onchange="onEsScenarioSel()">
+        <option value="">-- シナリオを選択 --</option>
+      </select>
+      <input id="es-sc" placeholder="または新規入力">
+    </div>
+  </div>
+  <div class="hintNote">💡 空欄で保存すると連携を解除します。新しい名前を入力すると新規シナリオとして登録されます。</div>
+  <div class="mActs">
+    <button class="hBtn" onclick="closeM('mEditScenario')">キャンセル</button>
+    <button class="hBtn pri" onclick="applyBoardScenario()">保存</button>
+  </div>
+</div></div>
 <div class="mOv" id="mLocList">
   <div class="modal">
     <div class="mTitle">📍 場所リスト編集</div>
@@ -1491,6 +1512,7 @@ function createBoard(){
   const b=newBoardObj({name,scenario:gv('nb-sc'),date:gv('nb-date'),
     pls:gv('nb-pls').split(/\s+/).filter(Boolean),kpMemo:gv('nb-memo')});
   boards[b.id]=b;saveAll();closeM('mNewBoard');renderBoardList();loadBoard(b.id);
+  refreshScenarioViews();
   showPanel('session');toast('Board「'+name+'」を作成しました','ok');
 }
 async function loadBoard(id){
@@ -1644,6 +1666,7 @@ function renderBoardList(){
   grid.innerHTML=list.map(b=>`<div class="bCard${b.id===curBID?' sel':''}" onclick="loadBoard('${b.id}');showPanel('session')">
     <div class="bCardActs">
       <button class="iBtn" onclick="event.stopPropagation();renameB('${b.id}')" title="名前変更">✏️</button>
+      <button class="iBtn" onclick="event.stopPropagation();showEditScenarioModal('${b.id}')" title="シナリオ変更">📖</button>
       <button class="iBtn" onclick="event.stopPropagation();dupB('${b.id}')" title="複製">📋</button>
       <button class="iBtn" onclick="event.stopPropagation();expB('${b.id}')" title="出力">📤</button>
       <button class="iBtn d" onclick="event.stopPropagation();delB('${b.id}')" title="削除">🗑</button>
@@ -1660,6 +1683,7 @@ function renameB(id){
   if(!newName||!newName.trim())return;
   b.name=newName.trim();b.updatedAt=Date.now();
   saveAll();renderBoardList();
+  refreshScenarioViews();
   // Update header if this is the current board
   if(curBID===id)
     document.getElementById('boardLabel').textContent=b.name+(b.scenario?' 【'+b.scenario+'】':'');
@@ -1690,7 +1714,7 @@ async function dupB(id){
     }
   }
   boards[n.id]=n;saveAll();
-  setTimeout(()=>renderBoardList(),50);
+  setTimeout(()=>{renderBoardList();refreshScenarioViews();},50);
   toast('複製しました','ok');
 }
 async function delB(id){
@@ -1704,11 +1728,21 @@ async function delB(id){
   delete boards[id];
   if(curBID===id){curBID=null;document.getElementById('boardLabel').textContent='Board未選択';}
   saveAll();renderBoardList();toast('削除しました','ok');
+  refreshScenarioViews();
 }
 function expBoard(){if(!curBID){toast('Boardを選択','err');return;}expB(curBID);}
 function expB(id){const b=boards[id];if(!b)return;dl(JSON.stringify(b,null,2),(b.name||'board')+'.sbr.json','application/json');}
 function impBoard(){document.getElementById('fi-board').click();}
-function handleImpB(e){const f=e.target.files[0];if(!f)return;readTxt(f,t=>{try{const b=JSON.parse(t);if(!b.id||!b.name){toast('無効なデータ','err');return;}b.id=mkID();boards[b.id]=b;saveAll();renderBoardList();toast('インポートしました','ok');}catch(err){toast('JSON解析失敗','err');}});e.target.value='';}
+function handleImpB(e){
+  const f=e.target.files[0];
+  if(!f)return;
+  readTxt(f,t=>{try{const b=JSON.parse(t);
+    if(!b.id||!b.name){toast('無効なデータ','err');
+    return;}b.id=mkID();
+  boards[b.id]=b;saveAll();renderBoardList();
+  refreshScenarioViews();
+  toast('インポートしました','ok');}catch(err){toast('JSON解析失敗','err');}});e.target.value='';
+}
 async function clearAll(){
   if(!confirm('全データを消去しますか？'))return;
   boards={};smemos={};localStorage.removeItem(SKB);localStorage.removeItem(SKSM);
@@ -2727,7 +2761,7 @@ function showPanel(name){
   document.getElementById('nav-'+name).classList.add('on');
   if(name==='scenario'){
     // Small delay ensures DOM is ready
-    setTimeout(()=>renderScenarioList(), 10);
+    setTimeout(()=>refreshScenarioViews(), 10);
   }
   if(name==='log'){renderLogRoomTabs();renderLog();}
 }
@@ -2908,6 +2942,11 @@ function showScenarioDetail(id){
         <div style="font-size:11px;color:var(--txt3)">${b.date||''} ${(b.pls||[]).join('・')}</div>
       </div>`).join('');
   }
+}
+/* シナリオ管理画面（一覧＋詳細）をまとめて再描画 */
+function refreshScenarioViews(){
+  renderScenarioList();                                  // 一覧側の「Board n卓」カウント更新
+  if(curSCID&&scenarios[curSCID])showScenarioDetail(curSCID); // 詳細側の関連Board一覧を更新
 }
 function schedScSave(){
   clearTimeout(scAutoST);
@@ -3436,6 +3475,56 @@ function parseIakToNpc(raw){
     skills,
     location:''   // 前回追加した現在地フィールド
   };
+}
+
+/* ── BOARD SCENARIO EDIT ── */
+let editScBID=null;
+function showEditScenarioModal(id){
+  const b=boards[id];if(!b)return;
+  editScBID=id;
+  document.getElementById('es-board-name').textContent=b.name;
+  const sel=document.getElementById('es-sc-sel');
+  sel.innerHTML='<option value="">-- シナリオを選択 --</option>'+
+    Object.values(scenarios).sort((a,b2)=>a.name.localeCompare(b2.name,'ja'))
+    .map(s=>`<option value="${esc(s.name)}"${b.scenario===s.name?' selected':''}>${esc(s.name)}</option>`).join('');
+  document.getElementById('es-sc').value=b.scenario||'';
+  openM('mEditScenario');
+}
+function onEsScenarioSel(){
+  const sel=document.getElementById('es-sc-sel');
+  if(sel.value)document.getElementById('es-sc').value=sel.value;
+}
+function applyBoardScenario(){
+  const b=boards[editScBID];if(!b){closeM('mEditScenario');return;}
+  const newName=gv('es-sc').trim();
+  const oldName=b.scenario||'';
+  if(newName===oldName){closeM('mEditScenario');return;}
+
+  // 現在開いているBoardなら、旧シナリオのメモを退避してから切替
+  if(curBID===editScBID&&oldName){
+    smemos[oldName]=document.getElementById('scenarioMemo').value;
+  }
+  b.scenario=newName;
+  b.updatedAt=Date.now();
+  if(newName)getOrCreateScenario(newName); // シナリオ管理側にも登録
+  saveAll();
+
+  // 現在開いているBoardならUIを即時更新
+  if(curBID===editScBID){
+    document.getElementById('boardLabel').textContent=
+      b.name+(b.scenario?' 【'+b.scenario+'】':'');
+    let memoVal=newName&&smemos[newName]?smemos[newName]:'';
+    if(!memoVal&&newName){
+      const sc=Object.values(scenarios).find(s=>s.name===newName);
+      if(sc)memoVal=sc.memo||'';
+    }
+    document.getElementById('scenarioMemo').value=memoVal;
+    renderRtList(); // オリジナル表はシナリオ連動なので再描画
+  }
+  renderBoardList();
+  refreshScenarioViews();   // ← renderScenarioList() から変更
+  closeM('mEditScenario');
+  toast(newName?'シナリオ「'+newName+'」に変更しました':'シナリオ連携を解除しました','ok');
 }
 </script>
 </body>
