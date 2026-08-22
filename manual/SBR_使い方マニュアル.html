@@ -168,6 +168,11 @@
     background:rgba(201,166,89,.12); color:var(--gold);
     padding:.1rem .4rem; border-radius:4px; font-size:.88em;
   }
+  kbd{
+    background:rgba(201,166,89,.12); color:var(--gold); border:1px solid var(--line);
+    padding:.05rem .4rem; border-radius:4px; font-size:.82em; font-family:inherit;
+    box-shadow:0 1px 0 var(--line);
+  }
 
   /* ---------- TOC ---------- */
   .toc{ list-style:none; padding:0; margin:0; display:grid; gap:.6rem;}
@@ -335,7 +340,7 @@
   <p class="sub">TRPGセッションの準備から本番、記録までをひとつの画面で。<br>はじめての方でも迷わないよう、この手引書に沿って開いてみてください。</p>
   <div class="meta">
     <a href="../SBR.html" target="_blank" rel="noopener">📖 SBR本体を開く</a>
-    <span>対応バージョン：v1.8.0（2026/08/17）</span>
+    <span>対応バージョン：v1.9.0（2026/08/23）</span>
     <span>動作環境：Google Chrome / Microsoft Edge / Firefox・Windows / macOS</span>
     <span>インストール不要</span>
   </div>
@@ -429,10 +434,22 @@
     <div class="card">
       <h3>📄 PDFエディタ</h3>
       <ul>
-        <li>「＋」ボタンで複数のシナリオPDFを追加でき、ドラッグ&amp;ドロップにも対応しています。</li>
+        <li>「📄＋」ボタンで複数のシナリオPDFを追加でき、ドラッグ&amp;ドロップにも対応しています。</li>
         <li>付箋・マーカー・メモをPDF上に直接残せます。</li>
         <li>v1.6.0以降、PDFはIndexedDBに保存され、Boardを開くと自動で復元されるため、毎回の再追加が基本的に不要です。</li>
         <li>同一シナリオであれば、別のBoardにもメモを引き継ぐことができます。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>📝 Markdownエディタ <span class="badge-new">v1.9.0で追加</span></h3>
+      <ul>
+        <li>同じタブバーの「📝＋」からMarkdown文書を新規作成、「📥MD」から<code>.md</code>／<code>.markdown</code>／<code>.txt</code>ファイルをインポートできます（PDFと同様、ドラッグ&amp;ドロップにも対応）。1つのBoardにPDFとMarkdownを何個でも混在させて開いておけます。</li>
+        <li>見出し・太字／斜体／取り消し線・箇条書き／番号付き／チェックリスト・引用・コード・表・リンクなど、Notion程度のMarkdown記法に対応。「分割」「編集」「プレビュー」の3表示を切り替えられます。</li>
+        <li>Markdownに詳しくなくても使えるよう、書式ツールバー（H1〜H3・太字・リストなど）から記号を挿入できます。<kbd>Ctrl</kbd>+<kbd>B</kbd>（太字）／<kbd>Ctrl</kbd>+<kbd>I</kbd>（斜体）／<kbd>Ctrl</kbd>+<kbd>K</kbd>（リンク）のショートカットにも対応（Macは<kbd>⌘</kbd>）。</li>
+        <li>文字数・行数カウンターをツールバー右端に表示します。</li>
+        <li><strong>注釈（コメント）機能</strong> —— Notionにはない機能として、プレビュー本文の好きな範囲を選択してコメントを付箋のように紐づけられます。コメント箇所は編集画面・プレビュー双方でハイライト表示され、プレビューではマウスオーバーで内容を確認できます。「💬 コメント一覧」から全件の閲覧・該当箇所へのジャンプ・削除も可能です。</li>
+        <li>PDFの付箋と同様、同一シナリオであれば別のBoardにもMarkdown文書のコメントを引き継げます。</li>
       </ul>
     </div>
 
@@ -734,6 +751,18 @@
       <div><span class="eyebrow">Appendix D</span><h2>更新履歴</h2></div>
     </div>
     <p class="lead">これまでのバージョンアップの記録です。新しい順に並んでいます。</p>
+
+    <div class="card">
+      <h3>v1.9.0 <small style="color:var(--parchment-dim); font-weight:400;">2026/08/23</small></h3>
+      <ul>
+        <li>Session Boardの左ペインが「📄 PDFエディタ」／「📝 Markdownエディタ」を切り替えて使えるように。同じタブバーにPDFとMarkdown文書を混在させて何個でも開いておけます</li>
+        <li>Markdownは新規作成のほか、<code>.md</code>／<code>.markdown</code>／<code>.txt</code>ファイルのインポート、ドラッグ&amp;ドロップにも対応</li>
+        <li>見出し・太字／斜体／取り消し線・箇条書き／番号付き／チェックリスト・引用・コード・表・リンクなど、Notion程度のMarkdown記法をサポート。「分割／編集／プレビュー」の3表示を切り替え可能</li>
+        <li>書式ツールバー（H1〜H3・太字・リストなど）とショートカット（<kbd>Ctrl</kbd>+<kbd>B</kbd>／<kbd>I</kbd>／<kbd>K</kbd>、Macは<kbd>⌘</kbd>）を追加し、Markdown記法に詳しくなくても使えるように。文字数・行数カウンターも表示</li>
+        <li>Notionにはない機能として、本文選択範囲にコメントを紐づけられる「注釈」機能を追加。編集画面・プレビューでのハイライト表示、プレビューでのマウスオーバー確認、コメント一覧からのジャンプ・削除に対応</li>
+        <li>NPCタブへの貼り付け判定処理に残っていた不具合（該当箇所クリック時にエラーが発生する問題）を修正</li>
+      </ul>
+    </div>
 
     <div class="card">
       <h3>v1.8.0 <small style="color:var(--parchment-dim); font-weight:400;">2026/08/17</small></h3>
