@@ -6,6 +6,8 @@
 <title>SBR - Session Board and Record -</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzBkMTExNyIvPgogIDxyZWN0IHg9IjUiIHk9IjciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxOCIgcng9IjEuNSIgZmlsbD0iIzIyZDNlZSIgb3BhY2l0eT0iMC45Ii8+CiAgPHJlY3QgeD0iMTciIHk9IjciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxOCIgcng9IjEuNSIgZmlsbD0iIzA4OTFiMiIvPgogIDxyZWN0IHg9IjUiIHk9IjciIHdpZHRoPSIyMiIgaGVpZ2h0PSIyLjUiIHJ4PSIxIiBmaWxsPSIjNjdlOGY5Ii8+CiAgPGxpbmUgeDE9IjE2IiB5MT0iNyIgeDI9IjE2IiB5Mj0iMjUiIHN0cm9rZT0iIzBkMTExNyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz4KICA8cmVjdCB4PSI4IiB5PSIxMyIgd2lkdGg9IjUiIGhlaWdodD0iMS4yIiByeD0iMC42IiBmaWxsPSIjMGQxMTE3IiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSI4IiB5PSIxNiIgd2lkdGg9IjUiIGhlaWdodD0iMS4yIiByeD0iMC42IiBmaWxsPSIjMGQxMTE3IiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSI4IiB5PSIxOSIgd2lkdGg9IjMiIGhlaWdodD0iMS4yIiByeD0iMC42IiBmaWxsPSIjMGQxMTE3IiBvcGFjaXR5PSIwLjUiLz4KICA8cmVjdCB4PSIxOSIgeT0iMTMiIHdpZHRoPSI1IiBoZWlnaHQ9IjEuMiIgcng9IjAuNiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iMC4yIi8+CiAgPHJlY3QgeD0iMTkiIHk9IjE2IiB3aWR0aD0iNSIgaGVpZ2h0PSIxLjIiIHJ4PSIwLjYiIGZpbGw9IiNmZmYiIG9wYWNpdHk9IjAuMiIvPgogIDxyZWN0IHg9IjE5IiB5PSIxOSIgd2lkdGg9IjMiIGhlaWdodD0iMS4yIiByeD0iMC42IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjIiLz4KPC9zdmc+">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
 <style>
 /* ===== VARIABLES ===== */
 :root{
@@ -121,6 +123,68 @@ select{height:30px;padding:0 8px}
 .annoText{width:100%;height:100%;background:transparent;border:none;font-family:inherit;font-size:12px;color:inherit;resize:none;outline:none;min-height:36px}
 .annoDel{position:absolute;top:-8px;right:-8px;width:17px;height:17px;border-radius:50%;background:var(--red);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;cursor:pointer;z-index:20}
 .anno:hover .annoDel{opacity:1}
+#mdNewBtn,#mdImportBtn{font-size:12px;color:var(--txt3);padding:3px 7px;border-radius:var(--r);border:1px solid var(--border);background:var(--bg3);white-space:nowrap}
+#mdNewBtn:hover,#mdImportBtn:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* ===== MARKDOWN EDITOR ===== */
+#mdToolBar{display:flex;align-items:center;gap:5px;padding:4px 8px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+#mdToolBar label{font-size:11px;color:var(--txt3)}
+#mdCmtCount{color:var(--purple);margin-left:2px}
+.cBtn.pri-ish{border-color:var(--purple);color:var(--purple);background:var(--pdim)}
+#mdFmtBar{display:flex;gap:3px;flex-wrap:wrap;padding-right:8px;border-right:1px solid var(--border);margin-right:2px}
+.mdFmtB{font-weight:800}
+.mdFmtI{font-style:italic}
+.mdFmtS{text-decoration:line-through}
+.mdCounter{margin-left:auto;font-size:11px;color:var(--txt3);white-space:nowrap;padding-left:8px}
+#mdVP{position:absolute;top:0;left:0;right:0;bottom:0;flex-direction:row;overflow:hidden;background:var(--bg0)}
+#mdVP.v-edit .mdEditWrap{display:block;flex:1}
+#mdVP.v-edit .markdown-body{display:none}
+#mdVP.v-prev .mdEditWrap{display:none}
+#mdVP.v-prev .markdown-body{display:block;flex:1}
+#mdVP.v-split .mdEditWrap{display:block;flex:1;border-right:1px solid var(--border)}
+#mdVP.v-split .markdown-body{display:block;flex:1}
+.mdEditWrap{position:relative;overflow:hidden;background:var(--bg1)}
+.mdEditHL,.mdEditArea{position:absolute;inset:0;width:100%;height:100%;margin:0;border:none;border-radius:0;
+  font-family:var(--mono);font-size:12.5px;line-height:1.7;padding:14px;white-space:pre-wrap;word-wrap:break-word;box-sizing:border-box}
+.mdEditHL{overflow:hidden;pointer-events:none;color:transparent}
+.mdEditHL mark{background:rgba(168,85,247,.38);border-radius:2px;color:transparent}
+.mdEditArea{background:transparent;color:var(--txt);resize:none;overflow:auto}
+.mdEditArea:focus{box-shadow:none}
+.markdown-body{overflow-y:auto;padding:16px 20px;font-size:13.5px;line-height:1.75;color:var(--txt)}
+.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4{font-weight:800;margin:1em 0 .5em;line-height:1.3;color:var(--txt)}
+.markdown-body h1{font-size:1.6em;border-bottom:1px solid var(--border);padding-bottom:.25em}
+.markdown-body h2{font-size:1.35em;border-bottom:1px solid var(--border);padding-bottom:.2em}
+.markdown-body h3{font-size:1.15em}
+.markdown-body h4{font-size:1.02em;color:var(--txt2)}
+.markdown-body p{margin:.6em 0}
+.markdown-body ul,.markdown-body ol{margin:.5em 0 .5em 1.4em}
+.markdown-body li{margin:.2em 0}
+.markdown-body li input[type=checkbox]{margin-right:5px}
+.markdown-body a{color:var(--cyan)}
+.markdown-body strong{color:var(--txt);font-weight:800}
+.markdown-body em{color:var(--txt2)}
+.markdown-body blockquote{margin:.7em 0;padding:2px 14px;border-left:3px solid var(--cyan);background:var(--bg3);color:var(--txt2);border-radius:0 var(--r) var(--r) 0}
+.markdown-body code{font-family:var(--mono);background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:.92em}
+.markdown-body pre{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;overflow-x:auto;margin:.7em 0}
+.markdown-body pre code{background:none;border:none;padding:0}
+.markdown-body table{border-collapse:collapse;margin:.7em 0;font-size:.94em}
+.markdown-body th,.markdown-body td{border:1px solid var(--border);padding:5px 10px}
+.markdown-body th{background:var(--bg3);font-weight:700}
+.markdown-body hr{border:none;border-top:1px solid var(--border);margin:1.2em 0}
+.markdown-body img{max-width:100%;border-radius:var(--r)}
+.markdown-body mark.mdComment{background:rgba(168,85,247,.28);border-bottom:2px solid var(--purple);color:inherit;padding:0 1px;border-radius:2px;cursor:pointer}
+.markdown-body mark.mdComment:hover{background:rgba(168,85,247,.45)}
+#mdCmtPanel{position:absolute;top:0;right:0;bottom:0;width:260px;background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;padding:10px;z-index:30;box-shadow:-4px 0 18px rgba(0,0,0,.4)}
+.mdCmtItem{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:8px;margin-bottom:7px}
+.mdCmtItem.orphan{opacity:.55}
+.mdCmtQuote{font-size:11px;color:var(--purple);border-left:2px solid var(--purple);padding-left:6px;margin-bottom:4px}
+.mdCmtText{font-size:12px;color:var(--txt);margin-bottom:6px;white-space:pre-wrap}
+.mdCmtRow{display:flex;gap:5px;align-items:center}
+.mdCmtOrphan{font-size:10px;color:var(--txt3)}
+#mdCmtTip{position:fixed;max-width:280px;background:var(--bg4);border:1px solid var(--purple);border-radius:var(--r);
+  padding:8px 11px;font-size:12px;line-height:1.5;color:var(--txt);box-shadow:var(--shadow);z-index:500;
+  opacity:0;transform:translateY(2px);pointer-events:none;transition:opacity .12s,transform .12s;white-space:pre-wrap}
+#mdCmtTip.show{opacity:1;transform:translateY(0)}
 
 /* ===== PANE2: NPC ===== */
 #pNpc{flex:2.2;min-width:200px;border-left:1px solid var(--border);border-right:1px solid var(--border)}
@@ -621,11 +685,13 @@ select{height:30px;padding:0 8px}
 <!-- ======== SESSION 3-PANE ======== -->
 <div class="panel on" id="pSession">
 
-  <!-- PANE1: PDF -->
+  <!-- PANE1: PDF / Markdown -->
   <div class="pane" id="pPdf">
     <div id="pdfFileBar">
       <div id="pdfFileTabs"></div>
-      <button id="pdfAddBtn" onclick="openPdfs()" title="PDFを追加">＋</button>
+      <button id="pdfAddBtn" onclick="openPdfs()" title="PDFを追加">📄＋</button>
+      <button id="mdNewBtn" onclick="newMdDoc()" title="Markdown文書を新規作成">📝＋</button>
+      <button id="mdImportBtn" onclick="openMds()" title="Markdownファイルをインポート">📥MD</button>
     </div>
     <div id="annoBar">
       <label>付箋:</label>
@@ -639,6 +705,34 @@ select{height:30px;padding:0 8px}
       <button class="cBtn" onclick="clearAnnos()">🗑 消去</button>
       <span id="annoModeLabel">通常</span>
     </div>
+    <div id="mdToolBar" style="display:none">
+      <div id="mdFmtBar" onmousedown="event.preventDefault()">
+        <button class="cBtn" onclick="mdApplyLinePrefix('# ')" title="見出し1">H1</button>
+        <button class="cBtn" onclick="mdApplyLinePrefix('## ')" title="見出し2">H2</button>
+        <button class="cBtn" onclick="mdApplyLinePrefix('### ')" title="見出し3">H3</button>
+        <button class="cBtn mdFmtB" onclick="mdWrap('**','**','太字')" title="太字" data-mdkey="B">B</button>
+        <button class="cBtn mdFmtI" onclick="mdWrap('*','*','斜体')" title="斜体" data-mdkey="I">I</button>
+        <button class="cBtn mdFmtS" onclick="mdWrap('~~','~~','取消線')" title="取消線">S</button>
+        <button class="cBtn" onclick="mdApplyLinePrefix('- ')" title="箇条書き">• リスト</button>
+        <button class="cBtn" onclick="mdApplyLinePrefix('1. ')" title="番号付きリスト">1. リスト</button>
+        <button class="cBtn" onclick="mdApplyLinePrefix('- [ ] ')" title="チェックリスト">☑ リスト</button>
+        <button class="cBtn" onclick="mdApplyLinePrefix('> ')" title="引用">❝ 引用</button>
+        <button class="cBtn" onclick="mdWrap('`','`','コード')" title="インラインコード">&lt;/&gt;</button>
+        <button class="cBtn" onclick="mdInsertCodeBlock()" title="コードブロック">```</button>
+        <button class="cBtn" onclick="mdInsertLink()" title="リンク" data-mdkey="K">🔗 リンク</button>
+        <button class="cBtn" onclick="mdInsertTable()" title="表">⊞ 表</button>
+        <button class="cBtn" onclick="mdInsertAtCursor('\n---\n')" title="区切り線">― 区切り</button>
+      </div>
+      <label>表示:</label>
+      <button class="aBtn on" id="mdV-split" onclick="setMdView('split')">⬛ 分割</button>
+      <button class="aBtn" id="mdV-edit" onclick="setMdView('edit')">✏️ 編集</button>
+      <button class="aBtn" id="mdV-prev" onclick="setMdView('prev')">👁 プレビュー</button>
+      <button class="cBtn" onclick="toggleMdComments()">💬 コメント一覧<span id="mdCmtCount"></span></button>
+      <span id="mdCmtHint" class="d-none">
+        <button class="cBtn pri-ish" onclick="addMdComment()">💬 選択範囲にコメントを追加</button>
+      </span>
+      <span id="mdCounter" class="mdCounter"></span>
+    </div>
     <div id="pdfCtrl">
       <button class="cBtn" onclick="jumpPage(-1)">◀ 前</button>
       <span id="pageInfo">—</span>
@@ -650,9 +744,17 @@ select{height:30px;padding:0 8px}
       <button class="cBtn" onclick="applyZoom()">適用</button>
     </div>
     <div id="pdfVP">
-      <div class="dnd-hint">📄 PDFをここにドロップ</div>
-      <div id="pdfEmpty"><div class="ei">📄</div><div>＋ ボタンからPDFを追加<br><span class="fs-11 op-60">またはここにドラッグ&ドロップ</span></div></div>
+      <div class="dnd-hint">📄 PDF / 📝 Markdownをここにドロップ</div>
+      <div id="pdfEmpty"><div class="ei">📄</div><div>＋ ボタンからPDF/Markdownを追加<br><span class="fs-11 op-60">またはここにドラッグ&ドロップ</span></div></div>
       <div id="pdfPages" class="d-none"></div>
+      <div id="mdVP" class="v-split" style="display:none">
+        <div class="mdEditWrap">
+          <div id="mdEditHL" class="mdEditHL" aria-hidden="true"></div>
+          <textarea id="mdEditArea" class="mdEditArea" placeholder="Markdownを入力…（見出し・太字・リスト・チェックリスト・表・コードブロック・引用・リンクなどNotion相当の記法に対応）" spellcheck="false"></textarea>
+        </div>
+        <div id="mdPreview" class="markdown-body"></div>
+      </div>
+      <div id="mdCmtPanel" class="d-none"></div>
     </div>
   </div>
 
@@ -1236,6 +1338,7 @@ select{height:30px;padding:0 8px}
 </div>
 
 <input type="file" class="fi-hidden" id="fi-pdf" accept=".pdf" multiple onchange="handlePdfs(event)">
+<input type="file" class="fi-hidden" id="fi-md" accept=".md,.markdown,.txt" multiple onchange="handleMds(event)">
 <input type="file" class="fi-hidden" id="fi-portrait" accept="image/*" onchange="handlePortrait(event)">
 <input type="file" class="fi-hidden" id="fi-iak" accept=".json" multiple onchange="handleIaks(event)">
 <input type="file" class="fi-hidden" id="fi-iak-npc" accept=".json" multiple onchange="handleIakNpcs(event)">
@@ -1298,6 +1401,7 @@ let pendingPortIdx=-1;
 /* ── INIT ── */
 window.addEventListener('load',()=>{
   document.querySelectorAll('.pasteKeyHint').forEach(el=>{el.textContent=PASTE_KEY;});
+  document.querySelectorAll('[data-mdkey]').forEach(el=>{el.title+=' ('+(isMac?'⌘':'Ctrl+')+el.dataset.mdkey+')';});
   loadAll();
   initResize();
   renderBoardList();
@@ -1318,6 +1422,7 @@ window.addEventListener('load',()=>{
   document.addEventListener('mousedown',ev=>{
     const exPane=document.getElementById('pExplorer');
     const midEx=document.getElementById('mpEx');
+    const midNpc=document.getElementById('mpNpc');
     if(exPane&&exPane.contains(ev.target))_lastIakPanel='explorer';
     else if(midEx&&midEx.contains(ev.target))_lastIakPanel='session-ex';
     else if(midNpc&&midNpc.contains(ev.target))_lastIakPanel='session-npc';   // ★追加
@@ -1537,29 +1642,31 @@ async function loadBoard(id){
   if(visObs){visObs.disconnect();visObs=null;}
   const metas=b.pdfMeta||[];
   pdfFiles=await Promise.all(metas.map(async m=>{
+    if(m.type==='md')return{...m}; // Markdown本文はBoard本体(localStorage)にそのまま保存済み
     const buf=await idbGet('pdfs',m.id);
     return{...m,data:buf?new Uint8Array(buf):null};
   }));
   if(curBID!==id)return; // 復元待ちの間に別Boardへ切り替えられていたら中断
+  showMdUI(false);
   renderPdfTabs();
   document.getElementById('pdfPages').innerHTML='';
-  const missing=pdfFiles.filter(f=>!f.data);
+  const missing=pdfFiles.filter(f=>f.type!=='md'&&!f.data);
   if(!pdfFiles.length){
     showPdfEmpty(true);
-    document.getElementById('pdfEmpty').innerHTML='<div class="ei">📄</div><div>＋ ボタンからPDFを追加</div>';
+    document.getElementById('pdfEmpty').innerHTML='<div class="ei">📄</div><div>＋ ボタンからPDF/Markdownを追加</div>';
   }else if(!missing.length){
     // 全PDFがIndexedDBから自動復元できたのでそのまま表示
     switchPdfTab(pdfFiles[0].id);
   }else{
     showPdfEmpty(true);
-    const first=pdfFiles.find(f=>f.data);
+    const first=pdfFiles.find(f=>f.type==='md'||f.data);
     const names=missing.map(f=>'<span style="font-size:11px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 7px">📄 '+esc(f.name)+'</span>').join(' ');
     document.getElementById('pdfEmpty').innerHTML=
       '<div class="ei">📄</div><div style="margin-bottom:10px">読み込めなかったPDF（再追加が必要です）</div>'
       +'<div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:14px">'+names+'</div>'
       +'<button class="hBtn pri" onclick="openPdfs()" style="font-size:13px;padding:7px 18px">📂 PDFを再追加</button>'
       +'<div style="font-size:11px;color:var(--txt3);margin-top:8px">※付箋データは保持されています</div>';
-    if(first)switchPdfTab(first.id); // 復元できたPDFがあれば先に開いておく
+    if(first)switchPdfTab(first.id); // 復元できたPDF/Markdownがあれば先に開いておく
   }
   logEntries=b.log||[];activeLogRoom='all';renderLogRoomTabs();renderLog();renderBoardList();
 }
@@ -1568,7 +1675,9 @@ function flush(){
   const b=boards[curBID];
   b.boardMemo=document.getElementById('boardMemo').value;
   if(b.scenario)smemos[b.scenario]=document.getElementById('scenarioMemo').value;
-  b.pdfMeta=pdfFiles.map(f=>({id:f.id,name:f.name,page:f.page||1,zoom:f.zoom||1}));
+  b.pdfMeta=pdfFiles.map(f=>f.type==='md'
+    ?{id:f.id,name:f.name,type:'md',content:f.content||'',view:f.view||'split'}
+    :{id:f.id,name:f.name,page:f.page||1,zoom:f.zoom||1});
   b.updatedAt=Date.now();
 }
 function saveBoard(){
@@ -1592,6 +1701,17 @@ function schedSave(){
             smemos[scName+'__pdf'][f.name+'::'+page]=annos;
           }
         });
+      });
+      localStorage.setItem('sbr6_sm',JSON.stringify(smemos));
+    }
+    // Persist Markdown comments to scenario for cross-board sharing
+    if(curBID&&boards[curBID]&&boards[curBID].scenario&&boards[curBID].mdComments){
+      const scName=boards[curBID].scenario;
+      if(!smemos[scName+'__mdc'])smemos[scName+'__mdc']={};
+      pdfFiles.forEach(f=>{
+        if(f.type!=='md')return;
+        const list=boards[curBID].mdComments[f.id];
+        if(list)smemos[scName+'__mdc'][f.name]=list;
       });
       localStorage.setItem('sbr6_sm',JSON.stringify(smemos));
     }
@@ -1847,10 +1967,13 @@ function initPdfDnD(){
     e.preventDefault();e.stopPropagation();
     dragCount=0;vp.classList.remove('dnd-over');
     if(!curBID){toast('先にBoardを選択してください','err');return;}
-    const files=[...e.dataTransfer.files].filter(f=>f.type==='application/pdf'||f.name.toLowerCase().endsWith('.pdf'));
-    if(!files.length){toast('PDFファイルをドロップしてください','err');return;}
-    // handlePdfs相当の処理をFileリストに対して実行
-    await processPdfFiles(files);
+    const all=[...e.dataTransfer.files];
+    const pdfDropped=all.filter(f=>f.type==='application/pdf'||f.name.toLowerCase().endsWith('.pdf'));
+    const mdDropped=all.filter(f=>/\.(md|markdown|txt)$/i.test(f.name));
+    if(!pdfDropped.length&&!mdDropped.length){toast('PDFまたはMarkdownファイルをドロップしてください','err');return;}
+    // handlePdfs/handleMds相当の処理をFileリストに対して実行
+    if(pdfDropped.length)await processPdfFiles(pdfDropped);
+    if(mdDropped.length)await processMdFiles(mdDropped);
   });
 }
 
@@ -1919,16 +2042,20 @@ async function handlePdfs(e){
   schedSave();e.target.value='';
 }
 function renderPdfTabs(){
-  document.getElementById('pdfFileTabs').innerHTML=pdfFiles.map(f=>`
-    <div class="pdfTab${f.id===curPID?' on':''}" onclick="switchPdfTab('${f.id}')">
-      📄 ${esc(f.name.replace(/\.pdf$/i,''))}<span class="x" onclick="event.stopPropagation();rmPdfTab('${f.id}')">✕</span>
-    </div>`).join('');
+  document.getElementById('pdfFileTabs').innerHTML=pdfFiles.map(f=>{
+    const isMd=f.type==='md';
+    const label=isMd?f.name.replace(/\.(md|markdown|txt)$/i,''):f.name.replace(/\.pdf$/i,'');
+    return `<div class="pdfTab${f.id===curPID?' on':''}" onclick="switchPdfTab('${f.id}')">
+      ${isMd?'📝':'📄'} ${esc(label)}<span class="x" onclick="event.stopPropagation();rmPdfTab('${f.id}')">✕</span>
+    </div>`;
+  }).join('');
 }
 function rmPdfTab(id){
   pdfFiles=pdfFiles.filter(f=>f.id!==id);delete pdfDocs[id];
   idbDel('pdfs',id); // IndexedDB側のバイナリも削除
+  if(curBID&&boards[curBID]&&boards[curBID].mdComments)delete boards[curBID].mdComments[id];
   if(curPID===id){curPID=pdfFiles.length?pdfFiles[0].id:null;
-    if(curPID)switchPdfTab(curPID);else{showPdfEmpty(true);renderPdfTabs();}
+    if(curPID)switchPdfTab(curPID);else{showMdUI(false);showPdfEmpty(true);renderPdfTabs();}
   }else renderPdfTabs();
   schedSave();
 }
@@ -1936,9 +2063,26 @@ function showPdfEmpty(yes){
   document.getElementById('pdfEmpty').style.display=yes?'flex':'none';
   document.getElementById('pdfPages').classList.toggle('d-none',yes);
 }
+function showMdUI(isMd){
+  document.getElementById('annoBar').style.display=isMd?'none':'';
+  document.getElementById('pdfCtrl').style.display=isMd?'none':'';
+  document.getElementById('mdToolBar').style.display=isMd?'':'none';
+  document.getElementById('mdVP').style.display=isMd?'flex':'none';
+  document.getElementById('pdfPages').style.display=isMd?'none':'';
+  document.getElementById('mdCmtPanel').classList.add('d-none');
+  document.getElementById('mdCmtHint').classList.add('d-none');
+  hideMdCmtTip();
+  if(isMd)document.getElementById('pdfEmpty').style.display='none';
+}
 async function switchPdfTab(id){
   curPID=id;renderPdfTabs();
   const f=pdfFiles.find(x=>x.id===id);if(!f)return;
+  if(f.type==='md'){
+    showMdUI(true);
+    openMdEditor(f);
+    return;
+  }
+  showMdUI(false);
   curZoom=f.zoom||1;
   document.getElementById('zoomNum').value=Math.round(curZoom*100);
   if(!f.data){showPdfEmpty(true);document.getElementById('pdfEmpty').innerHTML='<div class="ei">📄</div><div>このPDFを再追加してください（付箋は保持されています）</div>';return;}
@@ -2042,7 +2186,7 @@ function getPAs(tid,p){const k=aKey(tid,p),ba=getBAs();if(!ba[k])ba[k]=[];return
 
 function setAnno(mode){
   annoMode=mode;
-  document.querySelectorAll('.aBtn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#annoBar .aBtn').forEach(b=>b.classList.remove('on'));
   document.getElementById('aBtn-'+mode)?.classList.add('on');
   const lbls={none:'通常',sticky:'付箋',pin:'ピン',rect:'矩形',circle:'円',hl:'ハイライト',arrow:'矢印'};
   document.getElementById('annoModeLabel').textContent='モード: '+(lbls[mode]||mode);
@@ -2129,6 +2273,314 @@ function clearAnnos(){
   const ba=getBAs();Object.keys(ba).forEach(k=>{if(k.startsWith(curPID+'_'))delete ba[k];});
   document.querySelectorAll('.aLayer').forEach(l=>l.innerHTML='');schedSave();
 }
+
+/* ── MARKDOWN DOCS ──────────────────────────────────────────
+   PDFタブと同じpdfFiles配列にtype:'md'として混在させる。
+   本文(content)はPDFバイナリと違いテキストなのでBoard本体(localStorage)に
+   そのまま保存する(boardMemo等と同じ扱い、IndexedDBは使わない)。
+   注釈(コメント)はboards[curBID].mdCommentsに文書idごとの配列で保持し、
+   {start,end,quote}でraw markdown中の位置をアンカリングする。
+   本文編集で位置がずれた場合はquote文字列を再検索して追従する(reanchorMdComments)。 */
+let mdRenderT=null;
+function openMds(){document.getElementById('fi-md').click();}
+async function handleMds(e){
+  if(!curBID){toast('先にBoardを選択してください','err');e.target.value='';return;}
+  await processMdFiles([...e.target.files]);
+  e.target.value='';
+}
+async function processMdFiles(files){
+  if(!curBID){toast('先にBoardを選択してください','err');return;}
+  let lastId=null;
+  for(const file of files){
+    const text=await file.text();
+    const id='m'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
+    pdfFiles.push({id,name:file.name,type:'md',content:text,view:'split'});
+    lastId=id;
+    // コメントをシナリオから復元(同名文書の場合)
+    if(boards[curBID]&&boards[curBID].scenario){
+      const scName=boards[curBID].scenario;
+      const shared=(smemos[scName+'__mdc']||{})[file.name];
+      if(shared&&shared.length){
+        if(!boards[curBID].mdComments)boards[curBID].mdComments={};
+        boards[curBID].mdComments[id]=shared.map(c=>({...c}));
+      }
+    }
+  }
+  renderPdfTabs();showPdfEmpty(false);
+  if(lastId)switchPdfTab(lastId);
+  schedSave();
+  toast(files.length+'件のMarkdownを追加しました','ok');
+}
+function newMdDoc(){
+  if(!curBID){toast('先にBoardを選択してください','err');return;}
+  const name=prompt('Markdown文書名を入力してください:','無題.md');
+  if(name===null)return;
+  let nm=name.trim()||'無題.md';
+  if(!/\.(md|markdown|txt)$/i.test(nm))nm+='.md';
+  const id='m'+Date.now()+'_'+Math.random().toString(36).slice(2,5);
+  pdfFiles.push({id,name:nm,type:'md',content:'',view:'split'});
+  renderPdfTabs();showPdfEmpty(false);switchPdfTab(id);
+  schedSave();
+}
+function curMdFile(){return pdfFiles.find(x=>x.id===curPID&&x.type==='md');}
+function openMdEditor(f){
+  setMdView(f.view||'split',true);
+  const ta=document.getElementById('mdEditArea'),hl=document.getElementById('mdEditHL');
+  ta.value=f.content||'';
+  ta.oninput=onMdInput;
+  ta.onselect=updateMdCmtHint;ta.onkeyup=updateMdCmtHint;ta.onmouseup=updateMdCmtHint;
+  ta.onscroll=()=>{hl.scrollTop=ta.scrollTop;hl.scrollLeft=ta.scrollLeft;};
+  ta.onkeydown=onMdKeydown;
+  updateMdCmtHint();
+  updateMdCounter();
+  renderMdAll();
+}
+function onMdKeydown(e){
+  if(!(e.ctrlKey||e.metaKey))return;
+  if(e.key==='b'){e.preventDefault();mdWrap('**','**','太字');}
+  else if(e.key==='i'){e.preventDefault();mdWrap('*','*','斜体');}
+  else if(e.key==='k'){e.preventDefault();mdInsertLink();}
+}
+function onMdInput(){
+  const f=curMdFile();if(!f)return;
+  applyMdEditChange(f,document.getElementById('mdEditArea').value);
+}
+function applyMdEditChange(f,newVal){
+  f.content=newVal;
+  reanchorMdComments(f.id);
+  renderMdEditHL(); // 入力に即座に追従(タイプ位置が崩れないよう軽量なハイライトは都度更新)
+  updateMdCounter();
+  clearTimeout(mdRenderT);
+  mdRenderT=setTimeout(renderMdAll,400);
+  schedSave();
+}
+function updateMdCounter(){
+  const el=document.getElementById('mdCounter');if(!el)return;
+  const f=curMdFile();
+  if(!f){el.textContent='';return;}
+  const text=f.content||'';
+  const chars=text.length;
+  const lines=text.length?text.split('\n').length:1;
+  el.textContent=chars+'文字 / '+lines+'行';
+}
+function renderMdAll(){renderMdPreview();renderMdEditHL();renderMdCmtList();}
+
+/* ── MARKDOWN書式ショートカット ──────────────────────────────
+   Notion等の記法に詳しくなくても使えるよう、ツールバーからMarkdown記号を
+   textareaのカーソル位置/選択範囲に挿入する。行頭記号(見出し・リスト等)は
+   同じ記号なら解除、他の記号なら置き換えるトグル方式。 */
+const MD_LINE_MARKER_RE=/^(#{1,6}\s+|-\s\[[ xX]\]\s+|[-*+]\s+|\d+\.\s+|>\s*)/;
+function mdApplyLinePrefix(prefixToAdd){
+  const ta=document.getElementById('mdEditArea');
+  const f=curMdFile();if(!f||!ta)return;
+  const val=ta.value;
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  const lineStart=val.lastIndexOf('\n',s-1)+1;
+  let lineEnd=val.indexOf('\n',e);if(lineEnd===-1)lineEnd=val.length;
+  const block=val.slice(lineStart,lineEnd);
+  const lines=block.split('\n');
+  const already=lines.every(l=>l.startsWith(prefixToAdd));
+  const newLines=lines.map(l=>{
+    const stripped=l.replace(MD_LINE_MARKER_RE,'');
+    return already?stripped:prefixToAdd+stripped;
+  });
+  const newBlock=newLines.join('\n');
+  const newVal=val.slice(0,lineStart)+newBlock+val.slice(lineEnd);
+  ta.value=newVal;
+  const delta=newBlock.length-block.length;
+  ta.focus();ta.setSelectionRange(lineStart,Math.max(lineStart,lineEnd+delta));
+  applyMdEditChange(f,newVal);
+}
+function mdWrap(before,after,placeholder){
+  const ta=document.getElementById('mdEditArea');
+  const f=curMdFile();if(!f||!ta)return;
+  const val=ta.value;
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  const sel=val.slice(s,e)||placeholder||'';
+  const beforeSlice=val.slice(Math.max(0,s-before.length),s);
+  const afterSlice=val.slice(e,e+after.length);
+  if(val.slice(s,e)&&beforeSlice===before&&afterSlice===after){
+    // 既に囲まれている場合はトグルで解除
+    const newVal=val.slice(0,s-before.length)+sel+val.slice(e+after.length);
+    ta.value=newVal;
+    const ns=s-before.length;
+    ta.focus();ta.setSelectionRange(ns,ns+sel.length);
+    applyMdEditChange(f,newVal);
+    return;
+  }
+  const newVal=val.slice(0,s)+before+sel+after+val.slice(e);
+  ta.value=newVal;
+  const ns=s+before.length;
+  ta.focus();ta.setSelectionRange(ns,ns+sel.length);
+  applyMdEditChange(f,newVal);
+}
+function mdInsertAtCursor(text){
+  const ta=document.getElementById('mdEditArea');
+  const f=curMdFile();if(!f||!ta)return;
+  const val=ta.value;
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  const newVal=val.slice(0,s)+text+val.slice(e);
+  ta.value=newVal;
+  const pos=s+text.length;
+  ta.focus();ta.setSelectionRange(pos,pos);
+  applyMdEditChange(f,newVal);
+}
+function mdInsertCodeBlock(){
+  const ta=document.getElementById('mdEditArea');
+  const f=curMdFile();if(!f||!ta)return;
+  const val=ta.value;
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  const sel=val.slice(s,e)||'コード';
+  const ins='```\n'+sel+'\n```';
+  const newVal=val.slice(0,s)+ins+val.slice(e);
+  ta.value=newVal;
+  const selStart=s+4;
+  ta.focus();ta.setSelectionRange(selStart,selStart+sel.length);
+  applyMdEditChange(f,newVal);
+}
+function mdInsertLink(){
+  const ta=document.getElementById('mdEditArea');
+  const f=curMdFile();if(!f||!ta)return;
+  const val=ta.value;
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  const sel=val.slice(s,e)||'リンクテキスト';
+  const url=prompt('リンク先URLを入力してください:','https://');
+  if(url===null)return;
+  const ins='['+sel+']('+url+')';
+  const newVal=val.slice(0,s)+ins+val.slice(e);
+  ta.value=newVal;
+  ta.focus();ta.setSelectionRange(s+1,s+1+sel.length);
+  applyMdEditChange(f,newVal);
+}
+function mdInsertTable(){
+  mdInsertAtCursor('\n| 見出し1 | 見出し2 |\n| --- | --- |\n| セル1 | セル2 |\n');
+}
+function setMdView(mode,silent){
+  const vp=document.getElementById('mdVP');
+  vp.classList.remove('v-split','v-edit','v-prev');
+  vp.classList.add('v-'+mode);
+  ['split','edit','prev'].forEach(m=>document.getElementById('mdV-'+m)?.classList.toggle('on',m===mode));
+  const f=curMdFile();
+  if(f){f.view=mode;if(!silent)schedSave();}
+}
+function updateMdCmtHint(){
+  const ta=document.getElementById('mdEditArea'),hint=document.getElementById('mdCmtHint');
+  if(!ta||!hint)return;
+  hint.classList.toggle('d-none',ta.selectionStart===ta.selectionEnd);
+}
+function addMdComment(){
+  const f=curMdFile();if(!f)return;
+  const ta=document.getElementById('mdEditArea');
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  if(s===e){toast('本文中のテキストを選択してください','err');return;}
+  const quote=f.content.slice(s,e);
+  const text=prompt('コメントを入力してください:','');
+  if(text===null)return;
+  const c={id:'c'+Date.now()+'_'+Math.random().toString(36).slice(2,5),start:s,end:e,quote,text,createdAt:Date.now()};
+  getMdComments(f.id).push(c);
+  renderMdAll();schedSave();
+  toast('コメントを追加しました','ok');
+}
+function getBMC(){if(!curBID)return{};if(!boards[curBID].mdComments)boards[curBID].mdComments={};return boards[curBID].mdComments;}
+function getMdComments(tid){const bmc=getBMC();if(!bmc[tid])bmc[tid]=[];return bmc[tid];}
+function reanchorMdComments(tid){
+  const f=pdfFiles.find(x=>x.id===tid);if(!f)return;
+  getMdComments(tid).forEach(c=>{
+    if(f.content.slice(c.start,c.end)===c.quote){c.orphan=false;return;}
+    const idx=f.content.indexOf(c.quote);
+    if(idx===-1){c.orphan=true;return;}
+    c.orphan=false;c.start=idx;c.end=idx+c.quote.length;
+  });
+}
+function delMdComment(tid,cid){
+  const list=getMdComments(tid);
+  const i=list.findIndex(c=>c.id===cid);
+  if(i!==-1)list.splice(i,1);
+  renderMdAll();schedSave();
+}
+function jumpMdComment(cid){
+  const f=curMdFile();if(!f)return;
+  const c=getMdComments(f.id).find(x=>x.id===cid);if(!c||c.orphan)return;
+  setMdView('edit');
+  const ta=document.getElementById('mdEditArea');
+  ta.focus();ta.setSelectionRange(c.start,c.end);
+  updateMdCmtHint();
+}
+function toggleMdComments(){
+  document.getElementById('mdCmtPanel').classList.toggle('d-none');
+  renderMdCmtList();
+}
+function renderMdCmtList(){
+  const panel=document.getElementById('mdCmtPanel'),cnt=document.getElementById('mdCmtCount');
+  const f=curMdFile();
+  if(!f){panel.innerHTML='';if(cnt)cnt.textContent='';return;}
+  const list=getMdComments(f.id);
+  if(cnt)cnt.textContent=list.length?'('+list.length+')':'';
+  if(panel.classList.contains('d-none'))return;
+  panel.innerHTML=list.length?list.map(c=>`
+    <div class="mdCmtItem${c.orphan?' orphan':''}">
+      <div class="mdCmtQuote">${esc(c.quote.length>60?c.quote.slice(0,60)+'…':c.quote)}</div>
+      <div class="mdCmtText">${esc(c.text)}</div>
+      <div class="mdCmtRow">
+        ${c.orphan?'<span class="mdCmtOrphan">本文から見つかりません</span>':`<button class="cBtn" onclick="jumpMdComment('${c.id}')">本文へ</button>`}
+        <button class="cBtn" onclick="delMdComment('${f.id}','${c.id}')">🗑 削除</button>
+      </div>
+    </div>`).join(''):'<div style="font-size:11px;color:var(--txt3);padding:8px">コメントはまだありません</div>';
+}
+function renderMdPreview(){
+  const f=curMdFile();
+  const prev=document.getElementById('mdPreview');if(!prev)return;
+  if(!f){prev.innerHTML='';return;}
+  let src=f.content||'';
+  const list=getMdComments(f.id).filter(c=>!c.orphan&&c.start<c.end&&c.end<=src.length).slice().sort((a,b)=>b.start-a.start);
+  list.forEach(c=>{
+    src=src.slice(0,c.end)+'</mark>'+src.slice(c.end);
+    src=src.slice(0,c.start)+'<mark class="mdComment" data-cid="'+c.id+'">'+src.slice(c.start);
+  });
+  let html='';
+  try{html=marked.parse(src,{breaks:true,gfm:true});}catch(err){html=esc(src);}
+  if(window.DOMPurify)html=DOMPurify.sanitize(html,{ADD_TAGS:['mark'],ADD_ATTR:['data-cid','target']});
+  prev.innerHTML=html;
+  prev.querySelectorAll('a[href]').forEach(a=>{a.target='_blank';a.rel='noopener noreferrer';});
+  const comments=getMdComments(f.id);
+  prev.querySelectorAll('.mdComment').forEach(m=>{
+    const c=comments.find(x=>x.id===m.dataset.cid);
+    m.addEventListener('click',()=>jumpMdComment(m.dataset.cid));
+    m.addEventListener('mouseenter',()=>{if(c)showMdCmtTip(m,c.text);});
+    m.addEventListener('mouseleave',hideMdCmtTip);
+  });
+}
+function renderMdEditHL(){
+  const f=curMdFile();
+  const hl=document.getElementById('mdEditHL');if(!hl)return;
+  if(!f){hl.innerHTML='';return;}
+  const src=f.content||'';
+  const list=getMdComments(f.id).filter(c=>!c.orphan&&c.start<c.end&&c.end<=src.length).sort((a,b)=>a.start-b.start);
+  let pos=0,out='';
+  list.forEach(c=>{
+    if(c.start<pos)return; // 重なりは先勝ちでスキップ
+    out+=esc(src.slice(pos,c.start));
+    out+='<mark>'+esc(src.slice(c.start,c.end))+'</mark>';
+    pos=c.end;
+  });
+  out+=esc(src.slice(pos));
+  hl.innerHTML=out+'\n'; // textareaと同じ末尾改行余白を確保しスクロール位置を合わせる
+  const ta=document.getElementById('mdEditArea');
+  if(ta){hl.scrollTop=ta.scrollTop;hl.scrollLeft=ta.scrollLeft;}
+}
+function showMdCmtTip(anchorEl,text){
+  if(!text)return;
+  let tip=document.getElementById('mdCmtTip');
+  if(!tip){tip=document.createElement('div');tip.id='mdCmtTip';document.body.appendChild(tip);}
+  tip.textContent=text;
+  const r=anchorEl.getBoundingClientRect();
+  const top=Math.min(r.bottom+6,window.innerHeight-40);
+  const left=Math.min(r.left,window.innerWidth-290);
+  tip.style.top=Math.max(4,top)+'px';
+  tip.style.left=Math.max(4,left)+'px';
+  tip.classList.add('show');
+}
+function hideMdCmtTip(){document.getElementById('mdCmtTip')?.classList.remove('show');}
 
 /* ── NPC ── */
 function showAddNpcModal(){
@@ -3422,7 +3874,7 @@ function newBoardObj(p={}){
   return{id:mkID(),name:p.name||'新規Board',scenario:p.scenario||'',date:p.date||today(),
     pls:p.pls||[],kpMemo:p.kpMemo||'',boardMemo:'',npcs:[],characters:[],
     locations:p.locations||[],   // ★追加
-    pdfMeta:[],annotations:{},log:[],createdAt:Date.now(),updatedAt:Date.now()};
+    pdfMeta:[],annotations:{},mdComments:{},log:[],createdAt:Date.now(),updatedAt:Date.now()};
 }
 
 /* ── NPC: ココフォリア/いあきゃらJSON読み込み ── */
