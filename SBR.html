@@ -128,6 +128,7 @@ select{height:30px;padding:0 8px}
 
 /* ===== MARKDOWN EDITOR ===== */
 #mdToolBar{display:flex;align-items:center;gap:5px;padding:4px 8px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+#mdToolBar.d-none{display:none}
 #mdToolBar label{font-size:11px;color:var(--txt3)}
 #mdCmtCount{color:var(--purple);margin-left:2px}
 .cBtn.pri-ish{border-color:var(--purple);color:var(--purple);background:var(--pdim)}
@@ -136,7 +137,8 @@ select{height:30px;padding:0 8px}
 .mdFmtI{font-style:italic}
 .mdFmtS{text-decoration:line-through}
 .mdCounter{margin-left:auto;font-size:11px;color:var(--txt3);white-space:nowrap;padding-left:8px}
-#mdVP{position:absolute;top:0;left:0;right:0;bottom:0;flex-direction:row;overflow:hidden;background:var(--bg0)}
+#mdVP{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:row;overflow:hidden;background:var(--bg0)}
+#mdVP.d-none{display:none}
 #mdVP.v-edit .mdEditWrap{display:block;flex:1}
 #mdVP.v-edit .markdown-body{display:none}
 #mdVP.v-prev .mdEditWrap{display:none}
@@ -705,7 +707,7 @@ select{height:30px;padding:0 8px}
       <button class="cBtn" onclick="clearAnnos()">🗑 消去</button>
       <span id="annoModeLabel">通常</span>
     </div>
-    <div id="mdToolBar" style="display:none">
+    <div id="mdToolBar" class="d-none">
       <div id="mdFmtBar" onmousedown="event.preventDefault()">
         <button class="cBtn" onclick="mdApplyLinePrefix('# ')" title="見出し1">H1</button>
         <button class="cBtn" onclick="mdApplyLinePrefix('## ')" title="見出し2">H2</button>
@@ -747,7 +749,7 @@ select{height:30px;padding:0 8px}
       <div class="dnd-hint">📄 PDF / 📝 Markdownをここにドロップ</div>
       <div id="pdfEmpty"><div class="ei">📄</div><div>＋ ボタンからPDF/Markdownを追加<br><span class="fs-11 op-60">またはここにドラッグ&ドロップ</span></div></div>
       <div id="pdfPages" class="d-none"></div>
-      <div id="mdVP" class="v-split" style="display:none">
+      <div id="mdVP" class="v-split d-none">
         <div class="mdEditWrap">
           <div id="mdEditHL" class="mdEditHL" aria-hidden="true"></div>
           <textarea id="mdEditArea" class="mdEditArea" placeholder="Markdownを入力…（見出し・太字・リスト・チェックリスト・表・コードブロック・引用・リンクなどNotion相当の記法に対応）" spellcheck="false"></textarea>
@@ -2066,8 +2068,8 @@ function showPdfEmpty(yes){
 function showMdUI(isMd){
   document.getElementById('annoBar').style.display=isMd?'none':'';
   document.getElementById('pdfCtrl').style.display=isMd?'none':'';
-  document.getElementById('mdToolBar').style.display=isMd?'':'none';
-  document.getElementById('mdVP').style.display=isMd?'flex':'none';
+  document.getElementById('mdToolBar').classList.toggle('d-none',!isMd);
+  document.getElementById('mdVP').classList.toggle('d-none',!isMd);
   document.getElementById('pdfPages').style.display=isMd?'none':'';
   document.getElementById('mdCmtPanel').classList.add('d-none');
   document.getElementById('mdCmtHint').classList.add('d-none');
