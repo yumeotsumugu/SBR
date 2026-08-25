@@ -1196,8 +1196,8 @@ select{height:30px;padding:0 8px}
   </div>
   <div class="sSec">
     <div class="sSecT">💻 バージョン情報</div>
-    <div class="sRow"><label>現在のバージョン</label><span class="versionInfo">1.9.0</span></div>
-    <div class="sRow"><label>最終更新日</label><span class="versionInfo">2026/08/23</span></div>
+    <div class="sRow"><label>現在のバージョン</label><span class="versionInfo">1.10.0</span></div>
+    <div class="sRow"><label>最終更新日</label><span class="versionInfo">2026/08/25</span></div>
   </div>
 </div>
 
@@ -1386,7 +1386,7 @@ const SKB='sbr6_b',SKSM='sbr6_sm',SKSET='sbr6_set',SKDICE='sbr6_d';
 const isMac=/Mac|iPhone|iPod|iPad/.test(navigator.platform||navigator.userAgent);
 const PASTE_KEY=isMac?'⌘V':'Ctrl+V';
 let boards={},smemos={};
-let cfg={theme:'dark',rollMode:'CCB',oppMode:'RESB',portraitSize:'none'};
+let cfg={theme:'dark',rollMode:'CCB',oppMode:'RESB',portraitSize:'sm'};
 let curBID=null,autoST=null;
 pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -1412,7 +1412,7 @@ window.addEventListener('load',()=>{
   updateModeUi();
   document.getElementById('nb-date').value=today();
   applyTheme(cfg.theme,true);
-  applyPortraitSize(cfg.portraitSize,true);
+  applyPortraitSize(cfg.portraitSize,false);
 
   document.addEventListener('keydown',e=>{
     if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();saveBoard();}
